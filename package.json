@@ -1,0 +1,15 @@
+{
+  "name": "states",
+  "version": "1.0.0",
+  "main": "firebase-setup.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "lottie-web": "^5.12.2"
+  }
+}

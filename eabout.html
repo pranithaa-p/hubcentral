@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About EventHub</title>
+    <meta name="description" content="Learn about EventHub, your ultimate event discovery and ticket booking platform with curated recommendations, group ticketing, and an AI event companion.">
+    <meta name="keywords" content="EventHub, event tickets, concerts, festivals, booking, AI event assistant, group ticketing">
+    <meta property="og:title" content="About EventHub">
+    <meta property="og:description" content="Discover EventHub, where events become unforgettable with smart features and seamless ticketing.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1514525253161-7a46d19cd819">
+    <meta property="og:url" content="https://yourwebsite.com/about">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6d28d9;
+            --secondary-color: #14b8a6;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --text-dark: #334155;
+            --text-light: #94a3b8;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --border-radius: 8px;
+            --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --glow-shadow: 0 0 10px rgba(109, 40, 217, 0.3);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+
+        html, body {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            scroll-behavior: smooth;
+        }
+
+        html::-webkit-scrollbar, body::-webkit-scrollbar {
+            display: none;
+        }
+
+        body {
+            min-height: 100vh;
+            background: url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819') no-repeat center center/cover;
+            background-attachment: scroll;
+            color: var(--text-dark);
+            line-height: 1.6;
+            position: relative;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(30, 41, 59, 0.4), rgba(30, 41, 59, 0.6));
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 3rem;
+            position: relative;
+            z-index: 2;
+            overflow-x: hidden;
+        }
+
+        .about-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 4rem;
+            margin: 3rem 0;
+            box-shadow: var(--box-shadow);
+            color: var(--light-color);
+            position: relative;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .about-section h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .about-section p {
+            font-size: 1.2rem;
+            font-weight: 300;
+            line-height: 1.9;
+            max-width: 800px;
+        }
+
+        .features {
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .features h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--light-color);
+            text-align: center;
+            margin-bottom: 2rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+            justify-content: center;
+        }
+
+        .feature-card {
+            background: var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            position: relative;
+            max-width: 400px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border: 1px solid rgba(109, 40, 217, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--glow-shadow);
+            border-color: var(--primary-color);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card .icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            color: var(--dark-color);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--text-dark);
+            font-size: 1rem;
+            font-weight: 300;
+        }
+
+        .mission-section {
+            text-align: center;
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--border-radius);
+            margin: 3rem 0;
+            box-shadow: var(--box-shadow);
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .mission-section h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .mission-section p {
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: var(--text-dark);
+            max-width: 90%;
+            margin: 0 auto;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            margin: 3rem 0 1rem;
+            color: var(--text-light);
+            font-size: 1rem;
+            font-weight: 300;
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem;
+            }
+
+            .about-section {
+                padding: 2.5rem;
+            }
+
+            .about-section h1 {
+                font-size: 2.5rem;
+            }
+
+            .features h2 {
+                font-size: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                justify-content: center;
+            }
+
+            .feature-card {
+                max-width: 100%;
+            }
+
+            .mission-section {
+                padding: 2rem;
+            }
+
+            .mission-section h2 {
+                font-size: 2rem;
+            }
+
+            footer {
+                padding: 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.5rem;
+            }
+
+            .about-section {
+                padding: 2rem;
+            }
+
+            .about-section h1 {
+                font-size: 2rem;
+            }
+
+            .about-section p {
+                font-size: 1.1rem;
+            }
+
+            .features h2 {
+                font-size: 1.8rem;
+            }
+
+            .feature-card {
+                padding: 1.5rem;
+            }
+
+            .feature-card h3 {
+                font-size: 1.3rem;
+            }
+
+            .mission-section {
+                padding: 1.5rem;
+            }
+
+            .mission-section h2 {
+                font-size: 1.8rem;
+            }
+
+            .mission-section p {
+                font-size: 1rem;
+            }
+
+            footer {
+                padding: 1rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    <main class="container">
+        <section class="about-section">
+            <h1>About EventHub</h1>
+            <p>Welcome to EventHub—your ultimate destination for unforgettable events. We're more than a ticketing platform; we're your partner in discovering concerts, festivals, comedy shows, and more, with seamless booking and personalized experiences.</p>
+        </section>
+
+        <section class="features">
+            <h2>What Makes EventHub Special?</h2>
+            <div class="features-grid">
+                <div class="feature-card" role="region" aria-labelledby="feature1">
+                    <span class="icon">🎉</span>
+                    <h3 id="feature1">Curated Event Discovery</h3>
+                    <p>Tell us your interests—music, comedy, or culture—and our smart system curates events that match your vibe, eliminating endless scrolling.</p>
+                </div>
+                <div class="feature-card" role="region" aria-labelledby="feature2">
+                    <span class="icon">👥</span>
+                    <h3 id="feature2">Seamless Group Ticketing</h3>
+                    <p>Planning an event with friends? Book tickets, split payments, and select seats together via a shared link for effortless group outings.</p>
+                </div>
+                <div class="feature-card" role="region" aria-labelledby="feature3">
+                    <span class="icon">🤖</span>
+                    <h3 id="feature3">Pulse: Your AI Event Buddy</h3>
+                    <p>Meet Pulse, our AI companion that enriches your event with schedules, insider tips, and engaging post-event discussions.</p>
+                </div>
+                <div class="feature-card" role="region" aria-labelledby="feature4">
+                    <span class="icon">🌍</span>
+                    <h3 id="feature4">Diverse Events, Global Reach</h3>
+                    <p>Explore local gigs, regional festivals, and international events, celebrating both niche performances and major spectacles.</p>
+                </div>
+                <div class="feature-card" role="region" aria-labelledby="feature5">
+                    <span class="icon">📔</span>
+                    <h3 id="feature5">Event Memories Journal</h3>
+                    <p>Save tickets, reviews, and memories in your personal Event Diary to relive every moment and build your event history.</p>
+                </div>
+                <div class="feature-card" role="region" aria-labelledby="feature6">
+                    <span class="icon">📋</span>
+                    <h3 id="feature6">Personalized Event Lists</h3>
+                    <p>Create custom event lists tailored to your tastes, share them with friends, and plan your next unforgettable experience.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mission-section">
+            <h2>Our Mission</h2>
+            <p>At EventHub, we’re dedicated to transforming how you experience events. From discovering the perfect show to cherishing the memories, we make every step seamless and extraordinary. It’s not just about tickets—it’s about creating moments that last.</p>
+        </section>
+
+        <footer>
+            <p>© 2025 EventHub. All rights reserved.</p>
+        </footer>
+    </main>
+</body>
+</html>

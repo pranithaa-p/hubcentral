@@ -1,0 +1,1805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventHub - Goa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #6d28d9;
+            --secondary-color: #14b8a6;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --text-dark: #334155;
+            --text-light: #94a3b8;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --accent-color: #f43f5e;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.3);
+            --neumo-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), -4px -4px 8px rgba(255, 255, 255, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light-color);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        main {
+            position: relative;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        main::-webkit-scrollbar {
+            display: none;
+        }
+
+        header {
+            background: var(--dark-color);
+            color: var(--light-color);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1100; /* Increased to stay above modals and content */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--light-color);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: color 0.3s, transform 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .profile-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .profile-avatar:hover {
+            transform: scale(1.1);
+        }
+
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--dark-color);
+            border-radius: 8px;
+            box-shadow: var(--neumo-shadow);
+            min-width: 150px;
+            z-index: 100;
+        }
+
+        .profile-dropdown.active {
+            display: block;
+        }
+
+        .profile-dropdown a,
+        .profile-dropdown button {
+            display: block;
+            padding: 0.8rem 1.2rem;
+            color: var(--light-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .profile-dropdown a:hover,
+        .profile-dropdown button:hover {
+            background: var(--primary-color);
+        }
+
+        .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--light-color);
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #6d28d9, #14b8a6);
+            transform: scale(1.05);
+            box-shadow: var(--neumo-shadow);
+        }
+
+        .btn-back {
+            background: var(--text-light);
+            color: var(--text-dark);
+        }
+
+        .btn-back:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-download {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: var(--gradient);
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+        }
+
+        .btn-download:hover {
+            background: linear-gradient(135deg, #14b8a6, #6d28d9);
+            transform: scale(1.1);
+        }
+
+        .btn-download.loading::after {
+            content: '';
+            border: 2px solid white;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 0.5s linear infinite;
+            position: absolute;
+            right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hero {
+            height: 50vh;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--light-color);
+            z-index: 100; /* Ensure hero stays below header */
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        .hero-content {
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 1rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .event-slider {
+            max-width: 1400px;
+            margin: 2rem auto;
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--neumo-shadow);
+            z-index: 100; /* Ensure slider stays below header */
+        }
+
+        .slider-container {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .slide {
+            flex: 0 0 100%;
+            height: 500px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            padding: 2rem;
+        }
+
+        .slide-content {
+            color: white;
+            max-width: 50%;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        .slide-content h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .slide-content p {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--glass-bg);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .slider-btn:hover {
+            background: var(--primary-color);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .prev-btn {
+            left: 1rem;
+        }
+
+        .next-btn {
+            right: 1rem;
+        }
+
+        .slider-nav {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .slider-dot {
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .slider-dot.active {
+            background: var(--primary-color);
+        }
+
+        .events {
+            padding: 3rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            z-index: 100; /* Ensure events section stays below header */
+        }
+
+        .events h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--dark-color);
+        }
+
+        .event-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .event-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .event-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .event-card-content {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .event-card h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    line-height: 1.4;
+    max-height: 3.6rem; /* Reduced to balance space for two lines */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+  
+    -webkit-box-orient: vertical;
+    padding-bottom: 0.2rem; /* Protect descenders */
+}
+
+.event-card-content {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem; /* Reduced from 1.5rem for compactness */
+}
+
+.event-info {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    display: grid;
+    gap: 0.5rem;
+    border-top: 1px solid var(--text-light);
+    padding-top: 0.75rem; /* Reverted to original for tighter spacing */
+}
+
+        .event-info-item {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            align-items: center;
+        }
+
+        .event-info-label {
+            font-weight: 600;
+            color: var(--text-dark);
+            text-align: left;
+        }
+
+        .event-info-value {
+            color: var(--text-light);
+            text-align: left;
+        }
+
+        .event-card .btn {
+            margin-top: auto;
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 900; /* Reduced to stay below header */
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 900px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            box-shadow: var(--neumo-shadow);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        .modal-header {
+            background: var(--gradient);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: var(--accent-color);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+            flex: 1;
+        }
+
+        .booking-progress {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .progress-step.active {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .progress-step i {
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .venue-item {
+            background: var(--glass-bg);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--neumo-shadow);
+            transition: transform 0.3s;
+        }
+
+        .venue-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .venue-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .venue-info p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .timeslots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .timeslot-btn {
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border: var(--glass-border);
+            color: var(--primary-color);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .timeslot-btn:hover,
+        .timeslot-btn.selected {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .venue-proceed-btn {
+            display: none;
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        .ticket-selection-container {
+            padding: 1rem;
+            background: var(--glass-bg);
+            border-radius: 12px;
+            box-shadow: var(--neumo-shadow);
+        }
+
+        .ticket-legend {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        .ticket-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .ticket-btn {
+            padding: 0.8rem;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: var(--glass-border);
+            text-align: center;
+        }
+
+        .ticket-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .ticket-general {
+            background-color: #d3d3d3;
+            color: #333;
+        }
+
+        .ticket-vip {
+            background-color: #ffca28;
+            color: #333;
+        }
+
+        .ticket-premium {
+            background-color: #87ceeb;
+            color: #333;
+        }
+
+        .ticket-selected {
+            background-color: var(--primary-color) !important;
+            color: white !important;
+        }
+
+        .ticket-sold-out {
+            background-color: #666 !important;
+            color: #ccc !important;
+            cursor: not-allowed;
+        }
+
+        .selection-summary {
+            text-align: center;
+            margin: 1rem 0;
+            font-size: 1rem;
+        }
+
+        #confirm-tickets-btn {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .payment-container {
+            display: flex;
+            gap: 1rem;
+            max-height: 70vh;
+        }
+
+        .payment-sidebar {
+            flex: 1;
+            background: var(--glass-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            max-height: 100%;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .payment-sidebar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .payment-sidebar h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .payment-sidebar p {
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .payment-sidebar p span:first-child {
+            font-weight: 600;
+        }
+
+        .payment-main {
+            flex: 2;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .payment-main::-webkit-scrollbar {
+            display: none;
+        }
+
+        .payment-tabs {
+            display: flex;
+            border-bottom: 2px solid var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .payment-tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-dark);
+            transition: all 0.3s;
+        }
+
+        .payment-tab.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .payment-tab-content {
+            display: none;
+        }
+
+        .payment-tab-content.active {
+            display: block;
+        }
+
+        .payment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 0.8rem;
+            border: 1px solid var(--text-light);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-group input:invalid[required]:not(:placeholder-shown) {
+            border-color: var(--error-color);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .payment-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .bill-modal-content {
+            max-width: 500px;
+            padding: 1.5rem;
+            text-align: center;
+            background: white;
+        }
+
+        .bill-header {
+            margin-bottom: 1rem;
+        }
+
+        .bill-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .bill-details {
+            padding: 1rem;
+            border-radius: 8px;
+            background: var(--glass-bg);
+            text-align: left;
+        }
+
+        .bill-details p {
+            margin: 0.5rem 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .bill-details p span:first-child {
+            font-weight: 600;
+        }
+
+        .bill-footer {
+            margin-top: 1rem;
+        }
+
+        .bill-footer button {
+            width: 100%;
+        }
+
+        footer {
+            background: var(--dark-color);
+            color: var(--light-color);
+            padding: 2rem;
+            z-index: 100; /* Ensure footer stays below header */
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: var(--light-color);
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                height: 40vh;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .hero p {
+                font-size: 1rem;
+            }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                right: 0;
+                background: var(--dark-color);
+                flex-direction: column;
+                padding: 1rem;
+                z-index: 1099; /* Below header */
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .hamburger {
+                display: block;
+            }
+            .event-grid {
+                grid-template-columns: 1fr;
+            }
+            .slide-content {
+                max-width: 70%;
+            }
+            .slide-content h3 {
+                font-size: 1.5rem;
+            }
+            .slide-content p {
+                font-size: 0.9rem;
+            }
+            .ticket-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            .ticket-btn {
+                font-size: 0.8rem;
+                padding: 0.6rem;
+            }
+            .payment-container {
+                flex-direction: column;
+            }
+            .payment-sidebar {
+                max-height: 200px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+            .hero p {
+                font-size: 0.9rem;
+            }
+            .modal-content {
+                width: 95%;
+            }
+            .slide-content {
+                max-width: 80%;
+            }
+            .booking-progress {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .payment-tabs {
+                flex-direction: column;
+            }
+            .payment-tab {
+                padding: 0.5rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">EventHub</div>
+            <ul class="nav-links">
+                <li><a href="events.html">Home</a></li>
+                <li><a href="#">Events</a></li>
+                <li><a href="#">Venues</a></li>
+                <li><a href="eoffer.html">Offers</a></li>
+                <li><a href="eabout.html">About</a></li>
+            </ul>
+            <div class="profile-container">
+                <div class="profile-avatar" aria-label="User Profile" id="profile-avatar">U</div>
+                <div class="profile-dropdown">
+                    <a href="user.html">View Profile</a>
+                    <button id="logout-btn">Sign Out</button>
+                </div>
+            </div>
+            <div class="hamburger" aria-label="Toggle navigation menu">☰</div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" style="background-image: url('https://thumbs.dreamstime.com/b/silhouettes-concert-crowd-front-bright-stage-lights-confetti-colourful-background-high-lighted-places-people-holding-83284529.jpg')">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h1>Discover Events in Goa</h1>
+                <p>Book your tickets for the latest concerts, comedy shows, and festivals near you.</p>
+            </div>
+        </section>
+
+        <!-- Events Section -->
+        <section class="events">
+            <div class="event-slider">
+                <div class="slider-container" id="slider-container">
+                    <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?q=80&w=2070&auto=format&fit=crop');">
+                        <div class="slide-content">
+                            <h3>Diljit Dosanjh Live</h3>
+                            <p>Punjabi Concert | All Ages | Upcoming</p>
+                            <button class="btn book-now-btn" data-event="Diljit Dosanjh Live" aria-label="Book tickets for Diljit Dosanjh Live">Book Now</button>
+                        </div>
+                    </div>
+                    <div class="slide" style="background-image: url('https://m.media-amazon.com/images/S/pv-target-images/0bc2dcd7f510863dd18a4e4c7a1a97106c01341d5564eb4a99f06b19079d0312.jpg');">
+                        <div class="slide-content">
+                            <h3>Zakir Khan: Mannpasand</h3>
+                            <p>Stand-Up Comedy | 16+ | Upcoming</p>
+                            <button class="btn book-now-btn" data-event="Zakir Khan: Mannpasand" aria-label="Book tickets for Zakir Khan: Mannpasand">Book Now</button>
+                        </div>
+                    </div>
+                    <div class="slide" style="background-image: url('https://www.india-tours.com/images/festivals/Dev-Deepawali-Festival-Varanasi/dev-deepawali-festival-varanasi-1.jpg');">
+                        <div class="slide-content">
+                            <h3>Hornbill Festival</h3>
+                            <p>Cultural Festival | All Ages | Upcoming</p>
+                            <button class="btn book-now-btn" data-event="Hornbill Festival" aria-label="Book tickets for Hornbill Festival">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="slider-btn prev-btn" aria-label="Previous slide">❮</button>
+                <button class="slider-btn next-btn" aria-label="Next slide">❯</button>
+                <div class="slider-nav">
+                    <span class="slider-dot active" data-slide="0"></span>
+                    <span class="slider-dot" data-slide="1"></span>
+                    <span class="slider-dot" data-slide="2"></span>
+                </div>
+            </div>
+
+            <h2>Upcoming Events</h2>
+            <div class="event-grid">
+                <div class="event-card">
+                    <img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?q=80&w=2070&auto=format&fit=crop" alt="Diljit Dosanjh Live" loading="lazy">
+                    <div class="event-card-content">
+                        <h3>Diljit Dosanjh Live</h3>
+                        <div class="event-info">
+                            <p><span class="event-info-label">Type:</span> Punjabi Concert</p>
+                            <p><span class="event-info-label">Rating:</span> All Ages</p>
+                            <p><span class="event-info-label">Duration:</span> 3hrs</p>
+                        </div>
+                        <button class="btn book-now-btn" data-event="Diljit Dosanjh Live" aria-label="Book tickets for Diljit Dosanjh Live">Book Now</button>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <img src="https://m.media-amazon.com/images/S/pv-target-images/0bc2dcd7f510863dd18a4e4c7a1a97106c01341d5564eb4a99f06b19079d0312.jpg" alt="Zakir Khan: Mannpasand" loading="lazy">
+                    <div class="event-card-content">
+                        <h3>Zakir Khan: Mannpasand</h3>
+                        <div class="event-info">
+                            <p><span class="event-info-label">Type:</span> Stand-Up Comedy</p>
+                            <p><span class="event-info-label">Rating:</span> 16+</p>
+                            <p><span class="event-info-label">Duration:</span> 2hrs</p>
+                        </div>
+                        <button class="btn book-now-btn" data-event="Zakir Khan: Mannpasand" aria-label="Book tickets for Zakir Khan: Mannpasand">Book Now</button>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <img src="https://nexplore.org/blog/wp-content/uploads/2016/04/Hornbill-Festival-1.jpg" alt="Hornbill Festival" loading="lazy">
+                    <div class="event-card-content">
+                        <h3>Hornbill Festival</h3>
+                        <div class="event-info">
+                            <p><span class="event-info-label">Type:</span> Cultural Festival</p>
+                            <p><span class="event-info-label">Rating:</span> All Ages</p>
+                            <p><span class="event-info-label">Duration:</span> 10hrs</p>
+                        </div>
+                        <button class="btn book-now-btn" data-event="Hornbill Festival" aria-label="Book tickets for Hornbill Festival">Book Now</button>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=2070&auto=format&fit=crop" alt="Arijit Singh Unplugged" loading="lazy">
+                    <div class="event-card-content">
+                        <h3>Arijit Singh Unplugged</h3>
+                        <div class="event-info">
+                            <p><span class="event-info-label">Type:</span> Bollywood Concert</p>
+                            <p><span class="event-info-label">Rating:</span> All Ages</p>
+                            <p><span class="event-info-label">Duration:</span> 3hrs</p>
+                        </div>
+                        <button class="btn book-now-btn" data-event="Arijit Singh Unplugged" aria-label="Book tickets for Arijit Singh Unplugged">Book Now</button>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <img src="https://www.tourmyindia.com/blog//wp-content/uploads/2019/09/Sri-Ram.jpg" alt="Theater: Ramlila" loading="lazy">
+                    <div class="event-card-content">
+                        <h3>Theater: Ramlila</h3>
+                        <div class="event-info">
+                            <p><span class="event-info-label">Type:</span> Theater Play</p>
+                            <p><span class="event-info-label">Rating:</span> All Ages</p>
+                            <p><span class="event-info-label">Duration:</span> 3hrs</p>
+                        </div>
+                        <button class="btn book-now-btn" data-event="Theater: Ramlila" aria-label="Book tickets for Theater: Ramlila">Book Now</button>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <img src="https://images.unsplash.com/photo-1503095396549-807759245b35?q=80&w=2070&auto=format&fit=crop" alt="NH7 Weekender" loading="lazy">
+                    <div class="event-card-content">
+                        <h3>NH7 Weekender</h3>
+                        <div class="event-info">
+                            <p><span class="event-info-label">Type:</span> Music Festival</p>
+                            <p><span class="event-info-label">Rating:</span> 16+</p>
+                            <p><span class="event-info-label">Duration:</span> 8hrs</p>
+                        </div>
+                        <button class="btn book-now-btn" data-event="NH7 Weekender" aria-label="Book tickets for NH7 Weekender">Book Now</button>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <img src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?q=80&w=2070&auto=format&fit=crop" alt="Digital Marketing Workshop" loading="lazy">
+                    <div class="event-card-content">
+                        <h3>Digital Marketing Workshop</h3>
+                        <div class="event-info">
+                            <p><span class="event-info-label">Type:</span> Workshop</p>
+                            <p><span class="event-info-label">Rating:</span> 18+</p>
+                            <p><span class="event-info-label">Duration:</span> 4hrs</p>
+                        </div>
+                        <button class="btn book-now-btn" data-event="Digital Marketing Workshop" aria-label="Book tickets for Digital Marketing Workshop">Book Now</button>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <img src="https://res.cloudinary.com/dczzp2imu/f5xuyivzmianuwgaiu9f" alt="Anubhav Singh Bassi Live" loading="lazy">
+                    <div class="event-card-content">
+                        <h3>Anubhav Singh Bassi Live</h3>
+                        <div class="event-info">
+                            <p><span class="event-info-label">Type:</span> Stand-Up Comedy</p>
+                            <p><span class="event-info-label">Rating:</span> 16+</p>
+                            <p><span class="event-info-label">Duration:</span> 2hrs</p>
+                        </div>
+                        <button class="btn book-now-btn" data-event="Anubhav Singh Bassi Live" aria-label="Book tickets for Anubhav Singh Bassi Live">Book Now</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Venue Selection Modal -->
+    <div id="venue-modal" class="modal" role="dialog" aria-labelledby="modal-event-name">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-event-name">Select Venue & Timeslot</h2>
+                <button id="close-modal" class="close-btn" aria-label="Close venue modal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="booking-progress">
+                    <div class="progress-step active"><i class="fas fa-ticket-alt"></i>Venue</div>
+                    <div class="progress-step"><i class="fas fa-ticket-alt"></i>Tickets</div>
+                    <div class="progress-step"><i class="fas fa-credit-card"></i>Payment</div>
+                    <div class="progress-step"><i class="fas fa-receipt"></i>Bill</div>
+                </div>
+                <div id="venue-list" class="venue-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ticket Selection Modal -->
+    <div id="ticket-modal" class="modal" role="dialog" aria-labelledby="ticket-selection">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="ticket-selection">Select Your Tickets</h2>
+                <button id="close-ticket-modal" class="close-btn" aria-label="Close ticket modal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="booking-progress">
+                    <div class="progress-step"><i class="fas fa-ticket-alt"></i>Venue</div>
+                    <div class="progress-step active"><i class="fas fa-ticket-alt"></i>Tickets</div>
+                    <div class="progress-step"><i class="fas fa-credit-card"></i>Payment</div>
+                    <div class="progress-step"><i class="fas fa-receipt"></i>Bill</div>
+                </div>
+                <div class="ticket-selection-container">
+                    <div class="ticket-legend">
+                        <div class="legend-item">
+                            <div class="legend-color ticket-general"></div>
+                            <span>General ₹299</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color ticket-vip"></div>
+                            <span>VIP ₹799</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color ticket-premium"></div>
+                            <span>Premium ₹1499</span>
+                        </div>
+                    </div>
+                    <div id="ticket-grid" class="ticket-grid" role="grid" aria-label="Ticket selection grid"></div>
+                    <div class="selection-summary" aria-live="polite">
+                        <p id="selected-tickets">Selected Tickets: None</p>
+                        <p id="total-cost">Total Cost: ₹0</p>
+                    </div>
+                    <button id="confirm-tickets-btn" class="btn" disabled aria-label="Book tickets now">Book Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Selection Modal -->
+    <div id="payment-modal" class="modal" role="dialog" aria-labelledby="payment-selection">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="payment-selection">Complete Payment</h2>
+                <button id="close-payment-modal" class="close-btn" aria-label="Close payment modal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="booking-progress">
+                    <div class="progress-step"><i class="fas fa-ticket-alt"></i>Venue</div>
+                    <div class="progress-step"><i class="fas fa-ticket-alt"></i>Tickets</div>
+                    <div class="progress-step active"><i class="fas fa-credit-card"></i>Payment</div>
+                    <div class="progress-step"><i class="fas fa-receipt"></i>Bill</div>
+                </div>
+                <div class="payment-container">
+                    <div class="payment-sidebar">
+                        <h3>Booking Summary</h3>
+                        <p><span>Event:</span> <span id="summary-event"></span></p>
+                        <p><span>Venue:</span> <span id="summary-venue"></span></p>
+                        <p><span>Timeslot:</span> <span id="summary-timeslot"></span></p>
+                        <p><span>Tickets:</span> <span id="summary-tickets"></span></p>
+                        <p><span>Total:</span> <span id="summary-total"></span></p>
+                    </div>
+                    <div class="payment-main">
+                        <div class="payment-tabs">
+                            <div class="payment-tab active" data-tab="credit-card">Credit/Debit Card</div>
+                            <div class="payment-tab" data-tab="upi">UPI</div>
+                            <div class="payment-tab" data-tab="net-banking">Net Banking</div>
+                        </div>
+                        <div class="payment-tab-content active" id="credit-card-content">
+                            <div class="payment-form">
+                                <div class="form-group">
+                                    <label for="card-number">Card Number</label>
+                                    <input type="text" id="card-number" placeholder="1234 5678 9012 3456" pattern="\d{16}" required>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="expiry-date">Expiry Date</label>
+                                        <input type="text" id="expiry-date" placeholder="MM/YY" pattern="\d{2}/\d{2}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cvv">CVV</label>
+                                        <input type="text" id="cvv" placeholder="123" pattern="\d{3}" required>
+                                    </div>
+                                </div>
+                                <div class="payment-actions">
+                                    <button class="btn btn-back" id="back-to-tickets">Back</button>
+                                    <button class="btn" id="pay-credit-card">Pay Now</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="payment-tab-content" id="upi-content">
+                            <div class="payment-form">
+                                <div class="form-group">
+                                    <label for="upi-id">UPI ID</label>
+                                    <input type="text" id="upi-id" placeholder="name@bank" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+" required>
+                                </div>
+                                <div class="payment-actions">
+                                    <button class="btn btn-back" id="back-to-tickets-upi">Back</button>
+                                    <button class="btn" id="pay-upi">Pay Now</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="payment-tab-content" id="net-banking-content">
+                            <div class="payment-form">
+                                <div class="form-group">
+                                    <label for="bank-select">Select Bank</label>
+                                    <select id="bank-select" required>
+                                        <option value="">Select Bank</option>
+                                        <option value="sbi">State Bank of India</option>
+                                        <option value="hdfc">HDFC Bank</option>
+                                        <option value="icici">ICICI Bank</option>
+                                    </select>
+                                </div>
+                                <div class="payment-actions">
+                                    <button class="btn btn-back" id="back-to-tickets-net">Back</button>
+                                    <button class="btn" id="pay-net-banking">Proceed to Bank</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bill Modal -->
+    <div id="bill-modal" class="modal" role="dialog" aria-labelledby="bill-title">
+        <div class="modal-content bill-modal-content">
+            <div class="bill-header">
+                <div class="bill-logo">EventHub</div>
+                <h2 id="bill-title">Booking Confirmation</h2>
+            </div>
+            <div class="bill-details">
+                <p><span>Event:</span> <span id="bill-event"></span></p>
+                <p><span>Venue:</span> <span id="bill-venue"></span></p>
+                <p><span>Timeslot:</span> <span id="bill-timeslot"></span></p>
+                <p><span>Tickets:</span> <span id="bill-tickets"></span></p>
+                <p><span>Payment Method:</span> <span id="bill-payment-method"></span></p>
+                <p><span>Total Amount:</span> <span id="bill-total"></span></p>
+                <p><span>Booking ID:</span> <span id="bill-id"></span></p>
+                <p><span>Date:</span> <span id="bill-date"></span></p>
+            </div>
+            <div class="bill-footer">
+                <p>Thank you for booking with EventHub!</p>
+                <button id="download-bill" class="btn btn-download" aria-label="Download PDF of bill">
+                    <i class="fas fa-download"></i> Download PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>EventHub</h3>
+                <ul class="footer-links">
+                    <li><a href="eabout.html">About Us</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Help</h3>
+                <ul class="footer-links">
+                    <li><a href="faq.html">FAQs</a></li>
+                    <li><a href="#">Booking Status</a></li>
+                    <li><a href="#">Refunds</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Connect</h3>
+                <div class="social-links">
+                    <a href="https://facebook.com" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://twitter.com" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="https://instagram.com" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>© 2025 EventHub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize GSAP ScrollTrigger
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Scroll Reveal for Event Cards
+            gsap.utils.toArray('.event-card').forEach(card => {
+                gsap.from(card, {
+                    scrollTrigger: {
+                        trigger: card,
+                        start: 'top 85%',
+                        toggleActions: 'play none none none'
+                    },
+                    opacity: 0,
+                    y: 50,
+                    duration: 0.5
+                });
+            });
+
+            // DOM Elements
+            const venueModal = document.getElementById('venue-modal');
+            const ticketModal = document.getElementById('ticket-modal');
+            const paymentModal = document.getElementById('payment-modal');
+            const billModal = document.getElementById('bill-modal');
+            const modalEventName = document.getElementById('modal-event-name');
+            const venueList = document.getElementById('venue-list');
+            const ticketGrid = document.getElementById('ticket-grid');
+            const selectedTickets = document.getElementById('selected-tickets');
+            const totalCost = document.getElementById('total-cost');
+            const confirmTicketsBtn = document.getElementById('confirm-tickets-btn');
+            const closeModal = document.getElementById('close-modal');
+            const closeTicketModal = document.getElementById('close-ticket-modal');
+            const closePaymentModal = document.getElementById('close-payment-modal');
+            const downloadBillBtn = document.getElementById('download-bill');
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            const profileAvatar = document.querySelector('.profile-avatar');
+            const profileDropdown = document.querySelector('.profile-dropdown');
+            const logoutBtn = document.getElementById('logout-btn');
+            const paymentTabs = document.querySelectorAll('.payment-tab');
+            const paymentTabContents = document.querySelectorAll('.payment-tab-content');
+            const backToTicketsButtons = document.querySelectorAll('.btn-back');
+
+            // Mandatory Sign-In Check
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+            const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+            if (!isLoggedIn || !user.username) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Update Profile Avatar
+            const updateProfileAvatar = () => {
+                try {
+                    const firstLetter = user.username.charAt(0).toUpperCase();
+                    profileAvatar.textContent = firstLetter;
+                    profileAvatar.setAttribute('aria-label', `User profile avatar with letter ${firstLetter}`);
+                    console.log('Profile updated:', { username: user.username });
+                } catch (error) {
+                    console.error('Error updating profile avatar:', error);
+                    profileAvatar.textContent = 'U';
+                }
+            };
+            updateProfileAvatar();
+
+            // Hamburger Menu
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+
+            // Profile Dropdown
+            profileAvatar.addEventListener('click', () => {
+                profileDropdown.classList.toggle('active');
+            });
+
+            // Sign Out
+            logoutBtn.addEventListener('click', () => {
+                sessionStorage.removeItem('isLoggedIn');
+                sessionStorage.removeItem('user');
+                alert('Signed out successfully!');
+                window.location.href = 'index.html';
+            });
+
+            // Venue Data
+            const venues = [
+                { name: "NTR Grounds", location: "Baazar Street, Goa", timeslots: ["4:00 PM", "7:00 PM"] },
+                { name: "IGMC Stadium", location: "Nehru Complex, Goa", timeslots: ["5:00 PM", "8:00 PM"] },
+                { name: "Siddhartha Auditorium", location: "Gur, Goa", timeslots: ["3:00 PM", "6:00 PM"] },
+                { name: "Ravindra Bharathi", location: "Rajadry, Goa", timeslots: ["2:00 PM", "5:00 PM"] },
+                { name: "Annamayya Hall", location: "VKR Nagar, Goa", timeslots: ["4:30 PM", "7:30 PM"] }
+            ];
+
+            // State Variables
+            let selectedTimeslot = null;
+            let selectedVenue = null;
+            let selectedTicketList = [];
+            let bookingDetails = null;
+            let currentEvent = null;
+
+            // Ticket Pricing
+            const ticketPrices = {
+                'General': 299,
+                'VIP': 799,
+                'Premium': 1499
+            };
+
+            // Toggle Body Scroll
+            function toggleBodyScroll(disable) {
+                document.body.style.overflowY = disable ? 'hidden' : 'auto';
+            }
+
+            // Manage Booked Tickets
+            function getBookedTickets(event, venue, timeslot) {
+                return JSON.parse(localStorage.getItem(`bookedTickets_${event}_${venue}_${timeslot}`) || '[]');
+            }
+
+            function saveBookedTickets(event, venue, timeslot, tickets) {
+                const key = `bookedTickets_${event}_${venue}_${timeslot}`;
+                const existingTickets = getBookedTickets(event, venue, timeslot);
+                const updatedTickets = [...new Set([...existingTickets, ...tickets])];
+                localStorage.setItem(key, JSON.stringify(updatedTickets));
+            }
+
+            // Open Venue Modal
+            function openVenueModal(event) {
+                try {
+                    console.log('Opening venue modal for event:', event);
+                    modalEventName.textContent = event;
+                    venueList.innerHTML = '';
+                    if (!Array.isArray(venues) || venues.length === 0) {
+                        throw new Error('Venue data is empty or invalid');
+                    }
+                    venues.forEach((venue, index) => {
+                        if (!venue.name || !Array.isArray(venue.timeslots) || venue.timeslots.length === 0) {
+                            console.warn(`Invalid venue data at index ${index}:`, venue);
+                            return;
+                        }
+                        const venueItem = document.createElement('div');
+                        venueItem.className = 'venue-item';
+                        venueItem.innerHTML = `
+                            <div class="venue-info">
+                                <h3>${venue.name}</h3>
+                                <p>${venue.location}</p>
+                            </div>
+                            <div class="timeslots"></div>
+                            <button class="btn venue-proceed-btn">Proceed</button>
+                        `;
+                        const timeslotsContainer = venueItem.querySelector('.timeslots');
+                        venue.timeslots.forEach(time => {
+                            const timeslotBtn = document.createElement('button');
+                            timeslotBtn.className = 'timeslot-btn';
+                            timeslotBtn.textContent = time;
+                            timeslotBtn.setAttribute('aria-label', `Select timeslot ${time} at ${venue.name}`);
+                            timeslotsContainer.appendChild(timeslotBtn);
+                            timeslotBtn.addEventListener('click', () => {
+                                console.log(`Selected timeslot ${time} for ${venue.name}`);
+                                timeslotsContainer.querySelectorAll('.timeslot-btn').forEach(btn => btn.classList.remove('selected'));
+                                timeslotBtn.classList.add('selected');
+                                selectedTimeslot = time;
+                                selectedVenue = venue.name;
+                                venueItem.querySelector('.venue-proceed-btn').style.display = 'block';
+                            });
+                        });
+                        venueList.appendChild(venueItem);
+                        venueItem.querySelector('.venue-proceed-btn').addEventListener('click', () => {
+                            if (selectedTimeslot && selectedVenue) {
+                                console.log('Proceeding to ticket selection:', { event, venue: selectedVenue, timeslot: selectedTimeslot });
+                                venueModal.style.display = 'none';
+                                openTicketModal(event, selectedVenue, selectedTimeslot);
+                            } else {
+                                alert('Please select a timeslot.');
+                            }
+                        });
+                    });
+                    venueModal.style.display = 'flex';
+                    toggleBodyScroll(true);
+                } catch (error) {
+                    console.error('Error in openVenueModal:', error);
+                    alert('Failed to load venues. Please try again.');
+                }
+            }
+
+            // Event Slider Logic
+            const sliderContainer = document.getElementById('slider-container');
+            const slides = document.querySelectorAll('.slide');
+            const sliderDots = document.querySelectorAll('.slider-dot');
+            const prevBtn = document.querySelector('.prev-btn');
+            const nextBtn = document.querySelector('.next-btn');
+            let currentSlide = 0;
+
+            function updateSlider() {
+                sliderContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+                sliderDots.forEach((dot, index) => dot.classList.toggle('active', index === currentSlide));
+            }
+
+            function autoSlide() {
+                currentSlide = (currentSlide + 1) % slides.length;
+                updateSlider();
+            }
+
+            let slideInterval = setInterval(autoSlide, 5000);
+
+            prevBtn.addEventListener('click', () => {
+                clearInterval(slideInterval);
+                currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+                updateSlider();
+                slideInterval = setInterval(autoSlide, 5000);
+            });
+
+            nextBtn.addEventListener('click', () => {
+                clearInterval(slideInterval);
+                currentSlide = (currentSlide + 1) % slides.length;
+                updateSlider();
+                slideInterval = setInterval(autoSlide, 5000);
+            });
+
+            sliderDots.forEach(dot => {
+                dot.addEventListener('click', () => {
+                    clearInterval(slideInterval);
+                    currentSlide = parseInt(dot.getAttribute('data-slide'));
+                    updateSlider();
+                    slideInterval = setInterval(autoSlide, 5000);
+                });
+            });
+
+            // Book Now Buttons
+            document.querySelectorAll('.book-now-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    currentEvent = btn.getAttribute('data-event');
+                    openVenueModal(currentEvent);
+                });
+            });
+
+            // Ticket Selection
+            function openTicketModal(event, venue, timeslot) {
+                ticketGrid.innerHTML = '';
+                selectedTicketList = [];
+                updateTicketSummary();
+                const bookedTickets = getBookedTickets(event, venue, timeslot);
+                const ticketTypes = [
+                    { type: 'General', count: 20 },
+                    { type: 'VIP', count: 12 },
+                    { type: 'Premium', count: 8 }
+                ];
+
+                ticketTypes.forEach(ticket => {
+                    for (let i = 1; i <= ticket.count; i++) {
+                        const ticketNumber = `${ticket.type}-${i}`;
+                        const ticketBtn = document.createElement('button');
+                        ticketBtn.className = 'ticket-btn';
+                        ticketBtn.setAttribute('aria-label', `Ticket ${ticketNumber}`);
+                        ticketBtn.textContent = ticketNumber;
+                        ticketBtn.classList.add(`ticket-${ticket.type.toLowerCase()}`);
+                        if (bookedTickets.includes(ticketNumber)) {
+                            ticketBtn.classList.add('ticket-sold-out');
+                            ticketBtn.disabled = true;
+                        } else {
+                            ticketBtn.addEventListener('click', () => {
+                                ticketBtn.classList.toggle('ticket-selected');
+                                selectedTicketList = ticketBtn.classList.contains('ticket-selected')
+                                    ? [...selectedTicketList, ticketNumber]
+                                    : selectedTicketList.filter(t => t !== ticketNumber);
+                                updateTicketSummary();
+                            });
+                        }
+                        ticketGrid.appendChild(ticketBtn);
+                    }
+                });
+                ticketModal.style.display = 'flex';
+                toggleBodyScroll(true);
+            }
+
+            // Update Ticket Summary
+            function updateTicketSummary() {
+                selectedTickets.textContent = `Selected Tickets: ${selectedTicketList.length ? selectedTicketList.join(', ') : 'None'}`;
+                const total = selectedTicketList.reduce((sum, ticket) => {
+                    const type = ticket.split('-')[0];
+                    return sum + ticketPrices[type];
+                }, 0);
+                totalCost.textContent = `Total Cost: ₹${total}`;
+                confirmTicketsBtn.disabled = selectedTicketList.length === 0;
+            }
+
+            // Confirm Tickets
+            confirmTicketsBtn.addEventListener('click', () => {
+                if (selectedTicketList.length > 0) {
+                    bookingDetails = {
+                        event: currentEvent,
+                        venue: selectedVenue,
+                        timeslot: selectedTimeslot,
+                        tickets: selectedTicketList,
+                        total: selectedTicketList.reduce((sum, ticket) => {
+                            const type = ticket.split('-')[0];
+                            return sum + ticketPrices[type];
+                        }, 0)
+                    };
+                    ticketModal.style.display = 'none';
+                    openPaymentModal();
+                }
+            });
+
+            // Open Payment Modal
+            function openPaymentModal() {
+                document.getElementById('summary-event').textContent = bookingDetails.event;
+                document.getElementById('summary-venue').textContent = bookingDetails.venue;
+                document.getElementById('summary-timeslot').textContent = bookingDetails.timeslot;
+                document.getElementById('summary-tickets').textContent = bookingDetails.tickets.join(', ');
+                document.getElementById('summary-total').textContent = `₹${bookingDetails.total}`;
+                paymentTabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        paymentTabs.forEach(t => t.classList.remove('active'));
+                        paymentTabContents.forEach(c => c.classList.remove('active'));
+                        tab.classList.add('active');
+                        document.getElementById(`${tab.getAttribute('data-tab')}-content`).classList.add('active');
+                    });
+                });
+                backToTicketsButtons.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        paymentModal.style.display = 'none';
+                        ticketModal.style.display = 'flex';
+                    });
+                });
+                paymentModal.style.display = 'flex';
+                toggleBodyScroll(true);
+
+                document.getElementById('pay-credit-card').addEventListener('click', processPayment);
+                document.getElementById('pay-upi').addEventListener('click', processPayment);
+                document.getElementById('pay-net-banking').addEventListener('click', processPayment);
+            }
+
+            // Process Payment
+            function processPayment(e) {
+                e.preventDefault();
+                const activeTab = document.querySelector('.payment-tab.active').getAttribute('data-tab');
+                const form = document.getElementById(`${activeTab}-content`);
+                const inputs = form.querySelectorAll('input, select');
+                let valid = true;
+                inputs.forEach(input => {
+                    if (!input.checkValidity()) {
+                        input.reportValidity();
+                        valid = false;
+                    }
+                });
+                if (valid) {
+                    const paymentMethod = activeTab.replace('-', ' ').replace(/\b\w/g, c => c.toUpperCase());
+                    saveBookedTickets(bookingDetails.event, bookingDetails.venue, bookingDetails.timeslot, bookingDetails.tickets);
+                    paymentModal.style.display = 'none';
+                    showBill(paymentMethod);
+                }
+            }
+
+            // Show Bill
+            function showBill(paymentMethod) {
+                document.getElementById('bill-event').textContent = bookingDetails.event;
+                document.getElementById('bill-venue').textContent = bookingDetails.venue;
+                document.getElementById('bill-timeslot').textContent = bookingDetails.timeslot;
+                document.getElementById('bill-tickets').textContent = bookingDetails.tickets.join(', ');
+                document.getElementById('bill-payment-method').textContent = paymentMethod;
+                document.getElementById('bill-total').textContent = `₹${bookingDetails.total}`;
+                document.getElementById('bill-id').textContent = `EH${Math.floor(Math.random() * 1000000)}`;
+                document.getElementById('bill-date').textContent = new Date().toLocaleString();
+                billModal.style.display = 'flex';
+                toggleBodyScroll(true);
+            }
+
+            // Download Bill
+            downloadBillBtn.addEventListener('click', async () => {
+                downloadBillBtn.classList.add('loading');
+                downloadBillBtn.disabled = true;
+                try {
+                    const element = document.querySelector('.bill-modal-content');
+                    const opt = {
+                        margin: [0.5, 0.5, 0.5, 0.5],
+                        filename: `EventHub_Booking_${bookingDetails.event}_${new Date().toISOString().split('T')[0]}.pdf`,
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2, useCORS: true },
+                        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                    };
+                    await html2pdf().set(opt).from(element).save();
+                    alert('PDF downloaded successfully!');
+                } catch (error) {
+                    console.error('PDF generation failed:', error);
+                    alert('Failed to download PDF. Please try again.');
+                } finally {
+                    downloadBillBtn.classList.remove('loading');
+                    downloadBillBtn.disabled = false;
+                }
+            });
+
+            // Close Modals
+            [venueModal, ticketModal, paymentModal, billModal].forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.style.display = 'none';
+                        toggleBodyScroll(false);
+                    }
+                });
+            });
+
+            closeModal.addEventListener('click', () => {
+                venueModal.style.display = 'none';
+                toggleBodyScroll(false);
+            });
+
+            closeTicketModal.addEventListener('click', () => {
+                ticketModal.style.display = 'none';
+                toggleBodyScroll(false);
+            });
+
+            closePaymentModal.addEventListener('click', () => {
+                paymentModal.style.display = 'none';
+                toggleBodyScroll(false);
+            });
+        });
+    </script>
+</body>
+</html>

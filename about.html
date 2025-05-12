@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About MovieHub</title>
+    <meta name="description" content="Learn about MovieHub, your ultimate movie ticket booking platform with mood-based recommendations, group booking, and an AI movie companion.">
+    <meta name="keywords" content="MovieHub, movie tickets, cinema, booking, AI movie companion, group booking">
+    <meta property="og:title" content="About MovieHub">
+    <meta property="og:description" content="Discover MovieHub, where movie nights become unforgettable with smart features and seamless booking.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c">
+    <meta property="og:url" content="https://yourwebsite.com/about">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #e63946;
+            --secondary-color: #457b9d;
+            --dark-color: #1d3557;
+            --light-color: #f1faee;
+            --text-dark: #2b2d42;
+            --text-light: #8d99ae;
+            --gradient: linear-gradient(135deg, rgba(230, 57, 70, 0.9), rgba(69, 123, 157, 0.9));
+            --border-radius: 16px;
+            --box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+            --glow-shadow: 0 0 12px rgba(230, 57, 70, 0.3);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', system-ui, sans-serif;
+        }
+
+        html, body {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            scroll-behavior: smooth;
+        }
+
+        html::-webkit-scrollbar, body::-webkit-scrollbar {
+            display: none;
+        }
+
+        body {
+            min-height: 100vh;
+            background: url('https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c') no-repeat center center/cover;
+            background-attachment: scroll;
+            color: var(--text-dark);
+            line-height: 1.6;
+            position: relative;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(29, 53, 87, 0.4), rgba(29, 53, 87, 0.6));
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 3rem;
+            position: relative;
+            z-index: 2;
+            overflow-x: hidden;
+        }
+
+        .about-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 4rem;
+            margin: 3rem 0;
+            box-shadow: var(--box-shadow);
+            color: var(--light-color);
+            position: relative;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .about-section h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .about-section p {
+            font-size: 1.2rem;
+            font-weight: 300;
+            line-height: 1.9;
+            max-width: 800px;
+        }
+
+        .features {
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .features h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--light-color);
+            text-align: center;
+            margin-bottom: 2rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+            justify-content: center;
+        }
+
+        .feature-card {
+            background: var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            position: relative;
+            max-width: 400px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border: 1px solid rgba(230, 57, 70, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--glow-shadow);
+            border-color: var(--primary-color);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card .icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            color: var(--dark-color);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--text-dark);
+            font-size: 1rem;
+            font-weight: 300;
+        }
+
+        .mission-section {
+            text-align: center;
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--border-radius);
+            margin: 3rem 0;
+            box-shadow: var(--box-shadow);
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .mission-section h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .mission-section p {
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: var(--text-dark);
+            max-width: 90%;
+            margin: 0 auto;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            margin: 3rem 0 1rem;
+            color: var(--text-light);
+            font-size: 1rem;
+            font-weight: 300;
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem;
+            }
+
+            .about-section {
+                padding: 2.5rem;
+            }
+
+            .about-section h1 {
+                font-size: 2.5rem;
+            }
+
+            .features h2 {
+                font-size: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                justify-content: center;
+            }
+
+            .feature-card {
+                max-width: 100%;
+            }
+
+            .mission-section {
+                padding: 2rem;
+            }
+
+            .mission-section h2 {
+                font-size: 2rem;
+            }
+
+            footer {
+                padding: 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.5rem;
+            }
+
+            .about-section {
+                padding: 2rem;
+            }
+
+            .about-section h1 {
+                font-size: 2rem;
+            }
+
+            .about-section p {
+                font-size: 1.1rem;
+            }
+
+            .features h2 {
+                font-size: 1.8rem;
+            }
+
+            .feature-card {
+                padding: 1.5rem;
+            }
+
+            .feature-card h3 {
+                font-size: 1.3rem;
+            }
+
+            .mission-section {
+                padding: 1.5rem;
+            }
+
+            .mission-section h2 {
+                font-size: 1.8rem;
+            }
+
+            .mission-section p {
+                font-size: 1rem;
+            }
+
+            footer {
+                padding: 1rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    <main class="container">
+        <section class="about-section">
+            <h1>About MovieHub</h1>
+            <p>Welcome to MovieHub—where movies become unforgettable experiences. We're not just another ticket booking platform; we're your partner in creating cinematic moments that resonate. From mood-based recommendations to interactive AI companions, we transform every movie night into something extraordinary.</p>
+        </section>
+
+        <section class="features">
+            <h2>What Makes MovieHub Special?</h2>
+            <div class="features-grid">
+                <div class="feature-card" role="region" aria-labelledby="feature1">
+                    <span class="icon">🎬</span>
+                    <h3 id="feature1">Mood-Based Movie Picks</h3>
+                    <p>Tell us your vibe—be it adventurous, cozy, or romantic—and our smart system curates a list of movies that perfectly match your mood. Say goodbye to choice overload!</p>
+                </div>
+                <div class="feature-card" role="region" aria-labelledby="feature2">
+                    <span class="icon">👥</span>
+                    <h3 id="feature2">Seamless Group Booking</h3>
+                    <p>Planning a movie night with friends? Book tickets, split payments, and let everyone choose their seats via a shared link. It’s group planning, simplified.</p>
+                </div>
+                <div class="feature-card" role="region" aria-labelledby="feature3">
+                    <span class="icon">🤖</span>
+                    <h3 id="feature3">Reel: Your AI Movie Buddy</h3>
+                    <p>Meet Reel, our AI companion that spices up your movie experience with trivia, behind-the-scenes insights, and lively post-movie discussions.</p>
+                </div>
+                <div class="feature-card" role="region" aria-labelledby="feature4">
+                    <span class="icon">🌍</span>
+                    <h3 id="feature4">Local Gems, Global Hits</h3>
+                    <p>Discover indie films, regional treasures, and local screenings alongside the latest blockbusters. We celebrate all cinema, big and small.</p>
+                </div>
+                <div class="feature-card" role="region" aria-labelledby="feature5">
+                    <span class="icon">📔</span>
+                    <h3 id="feature5">Movie Memories Journal</h3>
+                    <p>Your tickets, reviews, and ratings are saved in a personal Movie Diary. Relive every cinema visit and build a collection of your movie moments.</p>
+                </div>
+                <div class="feature-card" role="region" aria-labelledby="feature6">
+                    <span class="icon">📋</span>
+                    <h3 id="feature6">Personalized Watchlists</h3>
+                    <p>Create and manage custom watchlists for movies you want to see, tailored to your tastes and shared with friends for the perfect movie night.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mission-section">
+            <h2>Our Mission</h2>
+            <p>At MovieHub, we’re redefining how you experience movies. From the moment you choose a film to the memories you cherish afterward, we’re here to make every step unforgettable. It’s not just about tickets—it’s about creating movie moments that matter.</p>
+        </section>
+
+        <footer>
+            <p>© 2025 MovieHub. All rights reserved.</p>
+        </footer>
+    </main>
+</body>
+</html>

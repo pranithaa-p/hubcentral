@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventHub - Premium Features</title>
+    <meta name="description" content="Unlock premium event experiences with EventHub's exclusive features - curated recommendations, group ticketing, and special offers.">
+    <meta name="keywords" content="EventHub, event tickets, premium features, event offers, event experience">
+    <meta property="og:title" content="EventHub - Premium Features">
+    <meta property="og:description" content="Elevate your event experience with our exclusive ticketing features and member benefits.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1514525253161-7a46d19cd819">
+    <meta property="og:url" content="https://yourwebsite.com/features">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6d28d9;
+            --secondary-color: #14b8a6;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --text-dark: #334155;
+            --text-light: #94a3b8;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --border-radius: 8px;
+            --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --glow-shadow: 0 0 10px rgba(109, 40, 217, 0.3);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+
+        html, body {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            scroll-behavior: smooth;
+        }
+
+        html::-webkit-scrollbar, body::-webkit-scrollbar {
+            display: none;
+        }
+
+        body {
+            min-height: 100vh;
+            color: var(--text-dark);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: relative;
+            background-color: #f8fafc;
+        }
+
+        .bg-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+            z-index: -1;
+            filter: blur(1px);
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: var(--light-color);
+            text-align: center;
+            padding: 4rem 1rem;
+            position: relative;
+            animation: fadeInUp 0.8s ease-out;
+            border-bottom: 1px solid rgba(109, 40, 217, 0.2);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            line-height: 1.2;
+        }
+
+        header p {
+            font-size: 1.3rem;
+            font-weight: 300;
+            max-width: 700px;
+            margin: 0 auto 1.5rem;
+            color: var(--text-dark);
+        }
+
+        .badge-container {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .badge {
+            background: rgba(109, 40, 217, 0.1);
+            color: var(--primary-color);
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: 1px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .badge i {
+            font-size: 0.9rem;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin: 3rem 0;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .feature-card {
+            background: var(--light-color);
+            padding: 2.5rem 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+            max-width: 400px;
+            overflow: hidden;
+            border: 1px solid rgba(109, 40, 217, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--glow-shadow);
+            border-color: var(--primary-color);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card i {
+            font-size: 3.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover i {
+            animation: pulse 1s ease infinite;
+        }
+
+        .feature-card h3 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+            position: relative;
+            display: inline-block;
+        }
+
+        .feature-card h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 3px;
+            background: var(--secondary-color);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover h3::after {
+            opacity: 1;
+        }
+
+        .feature-card p {
+            font-size: 1.05rem;
+            font-weight: 300;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-tag {
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: auto;
+        }
+
+        .cta-container {
+            text-align: center;
+            margin: 4rem 0;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+            position: relative;
+        }
+
+        .cta-container::before {
+            content: '';
+            position: absolute;
+            top: -2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--primary-color), transparent);
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1.3rem 3rem;
+            background: var(--gradient);
+            color: var(--light-color);
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            font-size: 1.2rem;
+            font-weight: 600;
+            box-shadow: var(--box-shadow);
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(109, 40, 217, 0.4);
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 3rem 0;
+            padding: 2rem;
+            background: rgba(248, 250, 252, 0.7);
+            border-radius: var(--border-radius);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(109, 40, 217, 0.1);
+        }
+
+        .stat-item {
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--text-dark);
+            font-weight: 400;
+        }
+
+        footer {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: var(--text-light);
+            text-align: center;
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            margin: 3rem 0 1rem;
+            font-size: 1rem;
+            font-weight: 300;
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+            border-top: 1px solid rgba(109, 40, 217, 0.1);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            color: var(--text-dark);
+            font-size: 1.3rem;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1.5rem;
+            }
+
+            header {
+                padding: 3rem 1rem;
+            }
+
+            header h1 {
+                font-size: 2.8rem;
+            }
+
+            header p {
+                font-size: 1.1rem;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+                justify-content: center;
+                gap: 2rem;
+            }
+
+            .feature-card {
+                max-width: 100%;
+                padding: 2rem 1.5rem;
+            }
+
+            .cta-button {
+                padding: 1.1rem 2.2rem;
+                font-size: 1.1rem;
+            }
+
+            footer {
+                padding: 2rem;
+                font-size: 0.9rem;
+            }
+
+            .stat-item {
+                min-width: 120px;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            header {
+                padding: 2.5rem 1rem;
+            }
+
+            header h1 {
+                font-size: 2.2rem;
+            }
+
+            header p {
+                font-size: 1rem;
+            }
+
+            .badge {
+                padding: 0.4rem 1rem;
+                font-size: 0.8rem;
+            }
+
+            .feature-card {
+                padding: 1.8rem 1.2rem;
+            }
+
+            .feature-card i {
+                font-size: 3rem;
+            }
+
+            .feature-card h3 {
+                font-size: 1.4rem;
+            }
+
+            .feature-card p {
+                font-size: 0.95rem;
+            }
+
+            .cta-button {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
+
+            footer {
+                padding: 1.5rem;
+                font-size: 0.8rem;
+            }
+
+            .stat-item {
+                min-width: 100px;
+            }
+
+            .stat-number {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819" alt="Vibrant Event Background" class="bg-image">
+    <header>
+        <h1>Premium EventHub Features</h1>
+        <p>Unlock an exceptional event experience with our exclusive ticketing capabilities and member benefits.</p>
+        <div class="badge-container">
+            <span class="badge"><i class="fas fa-check-circle"></i> No Booking Fees</span>
+            <span class="badge"><i class="fas fa-bolt"></i> Instant Confirmation</span>
+            <span class="badge"><i class="fas fa-lock"></i> Secure Payments</span>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="features">
+            <div class="feature-card" role="region" aria-labelledby="feature1">
+                <i class="fas fa-ticket-alt"></i>
+                <h3 id="feature1">One-Click Ticketing</h3>
+                <p>Secure your event tickets in seconds with our streamlined process that remembers your preferences.</p>
+                <span class="feature-tag">MOST POPULAR</span>
+            </div>
+            <div class="feature-card" role="region" aria-labelledby="feature2">
+                <i class="fas fa-credit-card"></i>
+                <h3 id="feature2">Flexible Payment Options</h3>
+                <p>Pay your way with cards, digital wallets, or split payments among friends with integrated payment splitting.</p>
+                <span class="feature-tag">NEW</span>
+            </div>
+            <div class="feature-card" role="region" aria-labelledby="feature3">
+                <i class="fas fa-tags"></i>
+                <h3 id="feature3">Member-Only Discounts</h3>
+                <p>Exclusive pricing, early access to tickets, and special event deals just for our members.</p>
+                <span class="feature-tag">SAVE UP TO 40%</span>
+            </div>
+            <div class="feature-card" role="region" aria-labelledby="feature4">
+                <i class="fas fa-star"></i>
+                <h3 id="feature4">Curated Recommendations</h3>
+                <p>Our smart algorithm suggests events you'll love based on your interests and past attendance.</p>
+                <span class="feature-tag">SMART TECH</span>
+            </div>
+            <div class="feature-card" role="region" aria-labelledby="feature5">
+                <i class="fas fa-book"></i>
+                <h3 id="feature5">Digital Event Diary</h3>
+                <p>Track every event you've attended, rate them, and get anniversary notifications for your favorites.</p>
+                <span class="feature-tag">YOUR HISTORY</span>
+            </div>
+            <div class="feature-card" role="region" aria-labelledby="feature6">
+                <i class="fas fa-users"></i>
+                <h3 id="feature6">Group Ticketing Suite</h3>
+                <p>Organize event outings effortlessly with shared seat selection, payment collection, and reminders.</p>
+                <span class="feature-tag">SOCIAL</span>
+            </div>
+        </section>
+
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number">300K+</div>
+                <div class="stat-label">Tickets Booked Monthly</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">97%</div>
+                <div class="stat-label">Customer Satisfaction</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">1.5M+</div>
+                <div class="stat-label">Active Members</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Customer Support</div>
+            </div>
+        </div>
+
+        <div class="cta-container">
+            <a href="#" class="cta-button">Unlock Premium Features Now</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2025 EventHub. All premium features reserved for our valued customers.</p>
+        <div class="social-links">
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+    </footer>
+</body>
+</html>

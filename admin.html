@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - HubCentral</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <style>
+        :root {
+            --primary: #FFD700;
+            --secondary: #FF8C00;
+            --dark: #000000;
+            --light: #E5E5E5;
+            --neutral: #FFFFFF;
+        }
+        
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: var(--dark);
+            color: var(--neutral);
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        html::-webkit-scrollbar, body::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .glass {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+        
+        .neumorphic {
+            background: var(--light);
+            box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.5),
+                        -8px -8px 16px rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        .neumorphic:hover {
+            box-shadow: inset 6px 6px 12px rgba(0, 0, 0, 0.5),
+                        inset -6px -6px 12px rgba(255, 255, 255, 0.1);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        th {
+            background: var(--primary);
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        td {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .auth-modal-content {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(15px);
+            border-radius: 1rem;
+            width: 90%;
+            max-width: 400px;
+            padding: 2rem;
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+        }
+        
+        .auth-modal-content input {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--neutral);
+            font-size: 1rem;
+        }
+        
+        .auth-modal-content button {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--primary);
+            color: var(--dark);
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .auth-modal-content button:hover {
+            background: var(--secondary);
+        }
+        
+        .message-box {
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .message-box.error {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff0000;
+        }
+        
+        .message-box.success {
+            background: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+        }
+    </style>
+</head>
+<body class="relative">
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="auth-modal">
+        <div class="auth-modal-content glass" data-aos="zoom-in">
+            <div id="message-box" class="message-box" style="display: none;"></div>
+            <form id="auth-form">
+                <input type="password" id="admin-password" placeholder="Enter Admin Password" required>
+                <button type="submit">Access Admin Panel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="max-w-5xl mx-auto px-4 py-12" id="admin-panel" style="display: none;">
+        <div class="glass rounded-xl p-8" data-aos="fade-up">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-3xl font-bold gradient-text">Admin Panel</h1>
+                <button id="logout-btn" class="neumorphic px-4 py-2 rounded-md text-sm font-medium transition duration-300">Logout</button>
+            </div>
+            
+            <!-- Users Table -->
+            <h2 class="text-xl font-semibold mb-3 gradient-text">Registered Users</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Created At</th>
+                    </tr>
+                </thead>
+                <tbody id="users-table"></tbody>
+            </table>
+
+            <!-- Feedback Table -->
+            <h2 class="text-xl font-semibold mb-3 mt-6 gradient-text">User Feedback</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Message</th>
+                        <th>Created At</th>
+                    </tr>
+                </thead>
+                <tbody id="feedback-table"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Initialize AOS
+        AOS.init({ duration: 800, once: true });
+
+        // Elements
+        const authModal = document.getElementById('auth-modal');
+        const authForm = document.getElementById('auth-form');
+        const adminPanel = document.getElementById('admin-panel');
+        const messageBox = document.getElementById('message-box');
+        const usersTable = document.getElementById('users-table');
+        const feedbackTable = document.getElementById('feedback-table');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        // Hardcoded admin password (for demo; change in production)
+        const ADMIN_PASSWORD = 'admin123';
+
+        // Check admin status
+        if (sessionStorage.getItem('isAdmin') !== 'true') {
+            authModal.style.display = 'flex';
+        } else {
+            adminPanel.style.display = 'block';
+            loadData();
+        }
+
+        // Show Message
+        function showMessage(message, type) {
+            messageBox.innerHTML = `<lottie-player src="https://assets3.lottiefiles.com/packages/lf20_jbrw3hcz.json" background="transparent" speed="1" style="width: 20px; height: 20px;" autoplay></lottie-player> ${message}`;
+            messageBox.className = `message-box ${type}`;
+            messageBox.style.display = 'flex';
+            setTimeout(() => {
+                messageBox.style.display = 'none';
+            }, 3000);
+        }
+
+        // Authenticate Admin
+        authForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const password = document.getElementById('admin-password').value;
+
+            if (password === ADMIN_PASSWORD) {
+                sessionStorage.setItem('isAdmin', 'true');
+                authModal.style.display = 'none';
+                adminPanel.style.display = 'block';
+                showMessage('Access granted!', 'success');
+                loadData();
+            } else {
+                showMessage('Invalid password.', 'error');
+            }
+        });
+
+        // Logout
+        logoutBtn.addEventListener('click', () => {
+            sessionStorage.removeItem('isAdmin');
+            window.location.href = 'index.html';
+        });
+
+        // Load Data from localStorage
+        function loadData() {
+            // Load Users
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            if (users.length > 0) {
+                usersTable.innerHTML = '';
+                users.forEach(user => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${user.username}</td>
+                        <td>${user.email}</td>
+                        <td>${new Date(user.createdAt).toLocaleString()}</td>
+                    `;
+                    usersTable.appendChild(row);
+                });
+            } else {
+                usersTable.innerHTML = '<tr><td colspan="3">No users found.</td></tr>';
+            }
+
+            // Load Feedback
+            const feedbackList = JSON.parse(localStorage.getItem('feedbackList') || '[]');
+            if (feedbackList.length > 0) {
+                feedbackTable.innerHTML = '';
+                feedbackList.forEach(feedback => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${feedback.name}</td>
+                        <td>${feedback.email}</td>
+                        <td>${feedback.message}</td>
+                        <td>${new Date(feedback.createdAt).toLocaleString()}</td>
+                    `;
+                    feedbackTable.appendChild(row);
+                });
+            } else {
+                feedbackTable.innerHTML = '<tr><td colspan="4">No feedback found.</td></tr>';
+            }
+        }
+    </script>
+</body>
+</html>

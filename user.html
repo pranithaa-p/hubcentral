@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - HubCentral</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <style>
+        :root {
+            --primary: #FFD700;
+            --secondary: #DAA520;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --neutral: #FFFFFF;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: var(--light);
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Neumorphic */
+        .neumorphic {
+            background: var(--light);
+            box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.2),
+                        -8px -8px 16px rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
+        }
+        
+        .neumorphic:hover {
+            box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.2),
+                        inset -4px -4px 8px rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Profile Elements */
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 3rem;
+            border: 3px solid var(--secondary);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+        
+        .profile-avatar:hover {
+            transform: scale(1.05);
+        }
+        
+        .ticket-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .ticket-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-item {
+            position: relative;
+            color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        
+        .nav-item:hover {
+            color: var(--primary);
+        }
+        
+        /* Form Elements */
+        .form-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2);
+            outline: none;
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+        
+        .btn-outline {
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline:hover {
+            background: rgba(255, 215, 0, 0.1);
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            border-radius: 1.5rem;
+            width: 90%;
+            max-width: 500px;
+            padding: 2.5rem;
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.8rem;
+            color: var(--light);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: var(--primary);
+        }
+        
+        .message-box {
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0.75rem;
+            text-align: center;
+            font-size: 1rem;
+            display: none;
+        }
+        
+        .message-box.success {
+            background: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+        }
+        
+        .message-box.error {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff0000;
+        }
+        
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+        }
+        
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 120px;
+            background: rgba(0, 0, 0, 0.8);
+            color: var(--light);
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+        
+        .scroll-indicator span {
+            display: block;
+            width: 20px;
+            height: 20px;
+            border-bottom: 2px solid var(--primary);
+            border-right: 2px solid var(--primary);
+            transform: rotate(45deg);
+            margin: -10px;
+            animation: scrollDown 2s infinite;
+        }
+        
+        .scroll-indicator span:nth-child(2) {
+            animation-delay: -0.2s;
+        }
+        
+        .scroll-indicator span:nth-child(3) {
+            animation-delay: -0.4s;
+        }
+        
+        @keyframes scrollDown {
+            0% {
+                opacity: 0;
+                transform: rotate(45deg) translate(-20px, -20px);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: rotate(45deg) translate(20px, 20px);
+            }
+        }
+        
+        /* Footer */
+        .footer a:hover {
+            color: var(--primary);
+        }
+        
+        .footer p, .footer a {
+            color: var(--light);
+        }
+    </style>
+</head>
+<body class="relative">
+    <!-- Particles Background -->
+    <div id="particles-js" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"></div>
+
+    <!-- Sign Out Confirmation Modal -->
+    <div id="signout-modal" class="modal">
+        <div class="modal-content glass" data-aos="zoom-in" data-aos-duration="500">
+            <span class="close-modal">×</span>
+            <h3 class="text-xl font-semibold text-white mb-4">Confirm Sign Out</h3>
+            <p class="text-gray-400 mb-6">Are you sure you want to sign out?</p>
+            <div class="flex justify-end space-x-3">
+                <button id="cancel-signout" class="btn-outline px-6 py-2 rounded-lg">Cancel</button>
+                <button id="confirm-signout" class="btn-primary px-6 py-2 rounded-lg">Sign Out</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div id="edit-profile-modal" class="modal">
+        <div class="modal-content glass" data-aos="zoom-in" data-aos-duration="500">
+            <span class="close-modal">×</span>
+            <h3 class="text-xl font-semibold text-white mb-4">Edit Profile</h3>
+            <div id="edit-message-box" class="message-box"></div>
+            <form id="edit-profile-form">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Full Name</label>
+                    <input type="text" id="edit-name" class="w-full form-input px-4 py-2 rounded-lg" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Email</label>
+                    <input type="email" id="edit-email" class="w-full form-input px-4 py-2 rounded-lg" required>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Phone Number</label>
+                    <input type="tel" id="edit-phone" class="w-full form-input px-4 py-2 rounded-lg">
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" class="btn-outline px-6 py-2 rounded-lg close-modal">Cancel</button>
+                    <button type="submit" class="btn-primary px-6 py-2 rounded-lg">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="glass fixed top-0 w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-3xl font-extrabold gradient-text">HubCentral</a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="moviehub.html" class="hub-link text-white hover:text-yellow-400 px-4 py-2 rounded-md text-sm font-medium transition duration-300">MovieHub</a>
+                    <a href="eventhub.html" class="hub-link text-white hover:text-yellow-400 px-4 py-2 rounded-md text-sm font-medium transition duration-300">EventHub</a>
+                    <a href="airhub.html" class="hub-link text-white hover:text-yellow-400 px-4 py-2 rounded-md text-sm font-medium transition duration-300">AirHub</a>
+                    <span id="auth-link" class="profile-icon"></span>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="menu-toggle" class="text-white hover:text-yellow-400 focus:outline-none">
+                        <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass w-full absolute top-20 left-0">
+            <div class="px-4 py-3 space-y-3">
+                <a href="moviehub.html" class="hub-link block px-3 py-2 rounded-md text-base font-medium text-white hover:text-yellow-400 transition">MovieHub</a>
+                <a href="eventhub.html" class="hub-link block px-3 py-2 rounded-md text-base font-medium text-white hover:text-yellow-400 transition">EventHub</a>
+                <a href="airhub.html" class="hub-link block px-3 py-2 rounded-md text-base font-medium text-white hover:text-yellow-400 transition">AirHub</a>
+                <span id="mobile-auth-link" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-yellow-400 transition profile-icon"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Profile Sidebar -->
+            <div class="lg:w-1/4">
+                <div class="glass p-6 rounded-xl sticky top-28" data-aos="fade-right">
+                    <div class="flex flex-col items-center mb-8">
+                        <div id="profile-avatar" class="profile-avatar mb-4"></div>
+                        <h2 id="profile-name" class="text-xl font-semibold text-white mb-1"></h2>
+                        <p id="profile-email" class="text-gray-400 text-sm"></p>
+                    </div>
+                    
+                    <nav class="space-y-4">
+                        <a href="#" class="nav-item active block py-2">
+                            <i class="fas fa-user-circle mr-3"></i> Profile Overview
+                        </a>
+                        <a href="#" class="nav-item block py-2">
+                            <i class="fas fa-ticket-alt mr-3"></i> My Tickets
+                        </a>
+                        <a href="#" class="nav-item block py-2">
+                            <i class="fas fa-calendar-check mr-3"></i> Upcoming Events
+                        </a>
+                        <a href="#" class="nav-item block py-2">
+                            <i class="fas fa-heart mr-3"></i> Saved Events
+                        </a>
+                        <a href="#" class="nav-item block py-2 edit-profile-link">
+                            <i class="fas fa-cog mr-3"></i> Account Settings
+                        </a>
+                        <a href="admin.html" class="nav-item block py-2" id="admin-link" style="display: none;">
+                            <i class="fas fa-user-shield mr-3"></i> Admin Panel
+                        </a>
+                    </nav>
+                    
+                    <button id="sign-out" class="w-full mt-8 py-2.5 px-4 rounded-lg border border-red-400 text-red-400 hover:bg-red-400/10 transition flex items-center justify-center tooltip">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Sign Out
+                        <span class="tooltip-text">Sign out of your account</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Profile Content -->
+            <div class="lg:w-3/4">
+                <!-- Welcome Section -->
+                <div class="glass p-6 rounded-xl mb-8" data-aos="fade-up">
+                    <h2 class="text-2xl font-bold text-white mb-2">Welcome back, <span id="welcome-name" class="gradient-text"></span>!</h2>
+                    <p class="text-gray-400 mb-6">Here's your latest activity and account overview.</p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="moviehub.html" class="btn-primary px-6 py-2.5 rounded-lg flex items-center justify-center tooltip">
+                            <i class="fas fa-plus mr-2"></i> Book Tickets
+                            <span class="tooltip-text">Book new movie or event tickets</span>
+                        </a>
+                        <button class="btn-outline px-6 py-2.5 rounded-lg flex items-center justify-center tooltip">
+                            <i class="fas fa-star mr-2"></i> Redeem Points
+                            <span class="tooltip-text">Use your loyalty points</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="glass p-6 rounded-xl neumorphic" data-aos="fade-up" data-aos-delay="100">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 rounded-lg bg-yellow-500/10 text-yellow-400 flex items-center justify-center mr-4">
+                                <i class="fas fa-ticket-alt text-lg"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-400 text-sm">Upcoming Tickets</p>
+                                <h3 class="text-2xl font-bold text-white">3</h3>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass p-6 rounded-xl neumorphic" data-aos="fade-up" data-aos-delay="200">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 rounded-lg bg-yellow-500/10 text-yellow-400 flex items-center justify-center mr-4">
+                                <i class="fas fa-film text-lg"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-400 text-sm">Movies Watched</p>
+                                <h3 class="text-2xl font-bold text-white">24</h3>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass p-6 rounded-xl neumorphic" data-aos="fade-up" data-aos-delay="300">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 rounded-lg bg-yellow-500/10 text-yellow-400 flex items-center justify-center mr-4">
+                                <i class="fas fa-star text-lg"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-400 text-sm">Loyalty Points</p>
+                                <h3 class="text-2xl font-bold text-white">1,250</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Upcoming Tickets -->
+                <div class="glass p-6 rounded-xl mb-8" data-aos="fade-up">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-semibold text-white">Upcoming Tickets</h3>
+                        <a href="#" class="text-yellow-400 text-sm font-medium hover:underline">View All</a>
+                    </div>
+                    
+                    <div class="space-y-4" id="ticket-list">
+                        <!-- Tickets will be dynamically loaded -->
+                    </div>
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="glass p-6 rounded-xl mb-8" data-aos="fade-up">
+                    <h3 class="text-xl font-semibold text-white mb-6">Recent Activity</h3>
+                    <div class="space-y-4" id="activity-list">
+                        <!-- Activities will be dynamically loaded -->
+                    </div>
+                </div>
+                
+                <!-- Account Details -->
+                <div class="glass p-6 rounded-xl" data-aos="fade-up">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-semibold text-white">Account Details</h3>
+                        <button class="edit-profile-link text-yellow-400 text-sm font-medium hover:underline tooltip">
+                            Edit Profile
+                            <span class="tooltip-text">Update your account details</span>
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Full Name</label>
+                            <p id="account-name" class="text-white"></p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Email</label>
+                            <p id="account-email" class="text-white"></p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Phone Number</label>
+                            <p id="account-phone" class="text-white"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator" data-aos="fade-up" data-aos-delay="600">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass pt-16 pb-8 relative overflow-hidden footer">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div data-aos="fade-up">
+                    <h3 class="text-2xl font-bold gradient-text mb-4">HubCentral</h3>
+                    <p class="mb-4">Your premier destination for movies, events, and travel.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="hover:text-primary transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="hover:text-primary transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="hover:text-primary transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="hover:text-primary transition"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div data-aos="fade-up" data-aos-delay="100">
+                    <h3 class="text-xl font-semibold mb-4 text-white">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="moviehub.html" class="hub-link hover:text-primary transition">MovieHub</a></li>
+                        <li><a href="eventhub.html" class="hub-link hover:text-primary transition">EventHub</a></li>
+                        <li><a href="airhub.html" class="hub-link hover:text-primary transition">AirHub</a></li>
+                        <li><a href="#" class="hover:text-primary transition">About Us</a></li>
+                    </ul>
+                </div>
+                
+                <div data-aos="fade-up" data-aos-delay="200">
+                    <h3 class="text-xl font-semibold mb-4 text-white">Support</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-primary transition">Help Center</a></li>
+                        <li><a href="#" class="hover:text-primary transition">FAQs</a></li>
+                        <li><a href="#" class="hover:text-primary transition">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-primary transition">Terms of Service</a></li>
+                    </ul>
+                </div>
+                
+                <div data-aos="fade-up" data-aos-delay="300">
+                    <h3 class="text-xl font-semibold mb-4 text-white">Contact Us</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-center"><i class="fas fa-envelope mr-2 text-primary"></i> support@hubcentral.com</li>
+                        <li class="flex items-center"><i class="fas fa-phone-alt mr-2 text-primary"></i> (123) 456-7890</li>
+                        <li class="flex items-center"><i class="fas fa-map-marker-alt mr-2 text-primary"></i> 123 Hub Street, Digital City</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-yellow-500/50 pt-8 text-center" data-aos="fade-up">
+                <p>© 2025 HubCentral. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 w-12 h-12 rounded-full glass text-primary flex items-center justify-center opacity-0 invisible transition-all duration-300">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Initialize AOS
+        AOS.init({ duration: 800, once: true });
+
+        // Initialize Particles.js
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 50, density: { enable: true, value_area: 800 } },
+                color: { value: '#FFD700' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.3, random: true },
+                size: { value: 3, random: true },
+                line_linked: { enable: false },
+                move: { enable: true, speed: 1, direction: 'none', random: true }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' } },
+                modes: { repulse: { distance: 100 }, push: { particles_nb: 4 } }
+            },
+            retina_detect: true
+        });
+
+        // Check if user is logged in
+        const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+        let user = JSON.parse(sessionStorage.getItem('user')) || {
+            username: 'JohnDoe',
+            email: 'john.doe@example.com',
+            name: 'John Doe',
+            phone: '+1 (555) 123-4567',
+            isAdmin: false
+        };
+
+        if (!isLoggedIn) {
+            window.location.href = 'index.html';
+        } else {
+            // Set profile data
+            const firstLetter = user.name.charAt(0).toUpperCase();
+            document.getElementById('profile-avatar').textContent = firstLetter;
+            document.getElementById('profile-name').textContent = user.name;
+            document.getElementById('profile-email').textContent = user.email;
+            document.getElementById('welcome-name').textContent = user.name.split(' ')[0];
+            document.getElementById('account-name').textContent = user.name;
+            document.getElementById('account-email').textContent = user.email;
+            document.getElementById('account-phone').textContent = user.phone || 'Not set';
+            document.getElementById('edit-name').value = user.name;
+            document.getElementById('edit-email').value = user.email;
+            document.getElementById('edit-phone').value = user.phone || '';
+            document.getElementById('auth-link').innerHTML = `<a href="user.html" class="profile-icon w-10 h-10 rounded-full bg-primary text-dark flex items-center justify-center font-bold text-lg">${firstLetter}</a>`;
+            document.getElementById('mobile-auth-link').innerHTML = `<a href="user.html" class="profile-icon w-10 h-10 rounded-full bg-primary text-dark flex items-center justify-center font-bold text-lg">${firstLetter}</a>`;
+            
+            // Show admin link if user is admin
+            if (user.isAdmin) {
+                document.getElementById('admin-link').style.display = 'block';
+            }
+        }
+
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Back to Top Button
+        const backToTopButton = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('opacity-0', 'invisible');
+                backToTopButton.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopButton.classList.remove('opacity-100', 'visible');
+                backToTopButton.classList.add('opacity-0', 'invisible');
+            }
+        });
+
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Sign Out Modal
+        const signoutModal = document.getElementById('signout-modal');
+        const signOutButton = document.getElementById('sign-out');
+        const cancelSignout = document.getElementById('cancel-signout');
+        const confirmSignout = document.getElementById('confirm-signout');
+
+        signOutButton.addEventListener('click', () => {
+            signoutModal.style.display = 'flex';
+            AOS.refresh();
+        });
+
+        cancelSignout.addEventListener('click', () => {
+            signoutModal.style.display = 'none';
+        });
+
+        confirmSignout.addEventListener('click', () => {
+            sessionStorage.removeItem('isLoggedIn');
+            sessionStorage.removeItem('user');
+            window.location.href = 'index.html';
+        });
+
+        // Close Modals
+        document.querySelectorAll('.close-modal').forEach(btn => {
+            btn.addEventListener('click', () => {
+                signoutModal.style.display = 'none';
+                editProfileModal.style.display = 'none';
+            });
+        });
+
+        // Close Modal on Outside Click
+        signoutModal.addEventListener('click', (e) => {
+            if (e.target === signoutModal) {
+                signoutModal.style.display = 'none';
+            }
+        });
+
+        // Edit Profile Modal
+        const editProfileModal = document.getElementById('edit-profile-modal');
+        const editProfileLinks = document.querySelectorAll('.edit-profile-link');
+        const editProfileForm = document.getElementById('edit-profile-form');
+        const editMessageBox = document.getElementById('edit-message-box');
+
+        editProfileLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                editProfileModal.style.display = 'flex';
+                AOS.refresh();
+            });
+        });
+
+        editProfileModal.addEventListener('click', (e) => {
+            if (e.target === editProfileModal) {
+                editProfileModal.style.display = 'none';
+            }
+        });
+
+        // Validate Email
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        // Show Message
+        function showMessage(message, type) {
+            editMessageBox.textContent = message;
+            editMessageBox.className = `message-box ${type}`;
+            editMessageBox.style.display = 'block';
+            setTimeout(() => {
+                editMessageBox.style.display = 'none';
+            }, 5000);
+        }
+
+        // Edit Profile Form Submission
+        editProfileForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('edit-name').value.trim();
+            const email = document.getElementById('edit-email').value.trim();
+            const phone = document.getElementById('edit-phone').value.trim();
+
+            if (!name) {
+                showMessage('Full name is required.', 'error');
+                return;
+            }
+
+            if (!validateEmail(email)) {
+                showMessage('Please enter a valid email address.', 'error');
+                return;
+            }
+
+            user = { ...user, name, email, phone };
+            sessionStorage.setItem('user', JSON.stringify(user));
+            document.getElementById('profile-name').textContent = name;
+            document.getElementById('profile-email').textContent = email;
+            document.getElementById('welcome-name').textContent = name.split(' ')[0];
+            document.getElementById('account-name').textContent = name;
+            document.getElementById('account-email').textContent = email;
+            document.getElementById('account-phone').textContent = phone || 'Not set';
+            editProfileModal.style.display = 'none';
+            showMessage('Profile updated successfully!', 'success');
+        });
+
+        // Load Tickets (Simulated)
+        const tickets = [
+            {
+                title: 'Avengers: Endgame Premiere',
+                hub: 'MovieHub • Screen 5',
+                date: 'May 15, 2023',
+                time: '7:30 PM',
+                details: 'Seats: D12, D13'
+            },
+            {
+                title: 'Coldplay Concert',
+                hub: 'EventHub • VIP Section',
+                date: 'June 2, 2023',
+                time: '8:00 PM',
+                details: 'Tickets: 2'
+            }
+        ];
+
+        const ticketList = document.getElementById('ticket-list');
+        tickets.forEach((ticket, index) => {
+            const ticketCard = document.createElement('div');
+            ticketCard.className = 'ticket-card p-5 rounded-lg';
+            ticketCard.setAttribute('data-aos', 'fade-up');
+            ticketCard.setAttribute('data-aos-delay', (100 + index * 100).toString());
+            ticketCard.innerHTML = `
+                <div class="flex flex-col md:flex-row md:items-center justify-between">
+                    <div class="mb-4 md:mb-0">
+                        <h4 class="font-medium text-white">${ticket.title}</h4>
+                        <p class="text-sm text-gray-400">${ticket.hub}</p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                        <div>
+                            <p class="text-xs text-gray-400">DATE</p>
+                            <p class="text-sm font-medium text-white">${ticket.date}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-400">TIME</p>
+                            <p class="text-sm font-medium text-white">${ticket.time}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-400">DETAILS</p>
+                            <p class="text-sm font-medium text-white">${ticket.details}</p>
+                        </div>
+                        <button class="px-4 py-1.5 bg-yellow-500 text-gray-900 text-sm rounded-lg hover:bg-yellow-400 transition font-medium tooltip">
+                            View Ticket
+                            <span class="tooltip-text">View ticket details</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+            ticketList.appendChild(ticketCard);
+        });
+
+        // Load Recent Activity (Simulated)
+        const activities = [
+            { date: 'May 10, 2023', action: 'Booked tickets for Avengers: Endgame' },
+            { date: 'May 5, 2023', action: 'Saved Coldplay Concert to favorites' },
+            { date: 'Apr 28, 2023', action: 'Watched Spider-Man: No Way Home' }
+        ];
+
+        const activityList = document.getElementById('activity-list');
+        activities.forEach((activity, index) => {
+            const activityItem = document.createElement('div');
+            activityItem.className = 'flex items-center p-3 rounded-lg bg-gray-800/30';
+            activityItem.setAttribute('data-aos', 'fade-up');
+            activityItem.setAttribute('data-aos-delay', (100 + index * 100).toString());
+            activityItem.innerHTML = `
+                <div class="w-10 h-10 rounded-full bg-yellow-500/10 text-yellow-400 flex items-center justify-center mr-4">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div>
+                    <p class="text-sm text-white">${activity.action}</p>
+                    <p class="text-xs text-gray-400">${activity.date}</p>
+                </div>
+            `;
+            activityList.appendChild(activityItem);
+        });
+
+        // Restrict Hub Access
+        document.querySelectorAll('.hub-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+                const href = link.getAttribute('href');
+
+                if (!isLoggedIn) {
+                    sessionStorage.setItem('redirectUrl', href);
+                    window.location.href = 'index.html';
+                } else {
+                    window.location.href = href;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

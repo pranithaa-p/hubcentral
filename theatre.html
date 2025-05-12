@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinematic India - Movies Through Poetic Lens</title>
+    <style>
+        :root {
+            --primary-color: #e63946;
+            --secondary-color: #457b9d;
+            --dark-color: #1d3557;
+            --modal-header-color: #1d3557;
+            --light-color: #f1faee;
+            --text-dark: #2b2d42;
+            --text-light: #8d99ae;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --border-radius: 12px;
+            --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            --glow-shadow: 0 0 10px rgba(200, 42, 55, 0.5);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--light-color);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        header {
+            background: var(--gradient);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            box-shadow: var(--box-shadow);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .states-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .state-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .state-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--glow-shadow);
+        }
+
+        .state-image {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .state-content {
+            padding: 1.5rem;
+        }
+
+        .state-name {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .state-poem {
+            color: var(--text-dark);
+            font-style: italic;
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+
+        .movie-example {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            font-weight: 500;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+            background: var(--dark-color);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .states-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Cinematic India</h1>
+        <p class="subtitle">Poetic glimpses of Indian cinema through its diverse states</p>
+    </header>
+
+    <div class="container">
+        <div class="states-grid">
+            <!-- Andhra Pradesh -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Andhra Pradesh" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">Andhra Pradesh</h2>
+                    <p class="state-poem">
+                        "Where the Krishna and Godavari flow,<br>
+                        Epic tales on silver screens glow.<br>
+                        Heroes dance with fiery grace,<br>
+                        In vibrant colors, dreams embrace."
+                    </p>
+                    <p class="movie-example">Example: Baahubali, Magadheera</p>
+                </div>
+            </div>
+
+                        <!-- Assam -->
+            <div class="state-card">
+                <img src="https://www.ibef.org/assets/images/states/Assam-2.jpg" alt="Assam" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">Assam</h2>
+                    <p class="state-poem">
+                        "Where Brahmaputra's waters run wide,<br>
+                        Stories flow with the monsoon tide.<br>
+                        Simple truths in frames so pure,<br>
+                        Assam's cinema speaks demure."
+                    </p>
+                    <p class="movie-example">Example: Village Rockstars, Aamis</p>
+                </div>
+            </div>
+
+            <!-- Bihar -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Bihar" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">Bihar</h2>
+                    <p class="state-poem">
+                        "Ganga's soil, both harsh and kind,<br>
+                        Stories raw, yet so refined.<br>
+                        Struggle and hope in equal measure,<br>
+                        Bihari tales are cinema's treasure."
+                    </p>
+                    <p class="movie-example">Example: Gangs of Wasseypur, Manjhi - The Mountain Man</p>
+                </div>
+            </div>
+
+            <!-- Gujarat -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Gujarat" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">Gujarat</h2>
+                    <p class="state-poem">
+                        "Where colors dance in Rann's white sea,<br>
+                        And laughter rings so merrily.<br>
+                        From folk to modern tales so bright,<br>
+                        Gujarat's films are pure delight."
+                    </p>
+                    <p class="movie-example">Example: The Good Road, Wrong Side Raju</p>
+                </div>
+            </div>
+
+            <!-- Karnataka -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Karnataka" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">Karnataka</h2>
+                    <p class="state-poem">
+                        "Where ancient stones whisper lore,<br>
+                        New age stories forever pour.<br>
+                        From classic tales to modern views,<br>
+                        Sandalwood's magic never loses."
+                    </p>
+                    <p class="movie-example">Example: Lucia, Thithi</p>
+                </div>
+            </div>
+
+            <!-- Kerala -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Kerala" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">Kerala</h2>
+                    <p class="state-poem">
+                        "Backwaters mirror stories deep,<br>
+                        Where reality and dreams both keep.<br>
+                        Masters of craft with vision true,<br>
+                        Malayalam cinema's golden hue."
+                    </p>
+                    <p class="movie-example">Example: Drishyam, Premam</p>
+                </div>
+            </div>
+
+            <!-- Maharashtra -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Maharashtra" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">Maharashtra</h2>
+                    <p class="state-poem">
+                        "Dreams take flight in Mumbai's glow,<br>
+                        Where film reels forever flow.<br>
+                        From Dadasaheb to modern fame,<br>
+                        The silver screen bears Maratha's name."
+                    </p>
+                    <p class="movie-example">Example: Sairat, Natsamrat</p>
+                </div>
+            </div>
+
+            <!-- Punjab -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Punjab" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">Punjab</h2>
+                    <p class="state-poem">
+                        "Golden fields and bhangra beat,<br>
+                        Stories rich, both bitter and sweet.<br>
+                        From partition's pain to love's pure song,<br>
+                        Punjabi cinema shines strong."
+                    </p>
+                    <p class="movie-example">Example: Chaar Sahibzaade, Punjab 1984</p>
+                </div>
+            </div>
+
+            <!-- Tamil Nadu -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Tamil Nadu" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">Tamil Nadu</h2>
+                    <p class="state-poem">
+                        "Where temples stand and stories thrive,<br>
+                        Kollywood dreams keep hopes alive.<br>
+                        From superstar might to art so fine,<br>
+                        Tamil cinema's light will always shine."
+                    </p>
+                    <p class="movie-example">Example: Nayakan, Pariyerum Perumal</p>
+                </div>
+            </div>
+
+            <!-- West Bengal -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="West Bengal" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">West Bengal</h2>
+                    <p class="state-poem">
+                        "Where Hooghly flows and poets dream,<br>
+                        Satyajit's legacy casts its gleam.<br>
+                        From art house gems to commercial cheer,<br>
+                        Bengali cinema's soul shines clear."
+                    </p>
+                    <p class="movie-example">Example: Pather Panchali, Autograph</p>
+                </div>
+            </div>
+          <!-- Rajasthan -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Rajasthan" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">Rajasthan</h2>
+                    <p class="state-poem">
+                        "Golden sands and royal grace,<br>
+                        Stories etched in time and space.<br>
+                        From folk tales to modern lore,<br>
+                        Rajasthan's cinema we adore."
+                    </p>
+                    <p class="movie-example">Example: Paheli, Duvidha</p>
+                </div>
+            </div>
+
+            <!-- Odisha -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Odisha" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">Odisha</h2>
+                    <p class="state-poem">
+                        "Where temples touch the eastern sky,<br>
+                        And waves of art come rolling by.<br>
+                        Simple stories, profound and true,<br>
+                        Odia cinema's golden view."
+                    </p>
+                    <p class="movie-example">Example: Sala Budha, Dhauli Express</p>
+                </div>
+            </div>
+
+            <!-- Jammu & Kashmir -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Jammu & Kashmir" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">Jammu & Kashmir</h2>
+                    <p class="state-poem">
+                        "Where snow-capped peaks meet azure lakes,<br>
+                        Cinema mirrors both joy and aches.<br>
+                        Through conflict and beauty, stories unfold,<br>
+                        Kashmir's narratives brave and bold."
+                    </p>
+                    <p class="movie-example">Example: Haider, Hamid</p>
+                </div>
+            </div>
+
+            <!-- Uttar Pradesh -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Uttar Pradesh" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">Uttar Pradesh</h2>
+                    <p class="state-poem">
+                        "Ganga's banks where stories brew,<br>
+                        From Benares' ghats to Lucknow's hue.<br>
+                        Politics and passion, love and strife,<br>
+                        UP's cinema mirrors life."
+                    </p>
+                    <p class="movie-example">Example: Masaan, Mukkabaaz</p>
+                </div>
+            </div>
+
+            <!-- Madhya Pradesh -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Madhya Pradesh" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">Madhya Pradesh</h2>
+                    <p class="state-poem">
+                        "Heart of India, land so vast,<br>
+                        Where present meets the ancient past.<br>
+                        Tribal tales and urban dreams,<br>
+                        MP's cinema flows in streams."
+                    </p>
+                    <p class="movie-example">Example: Newton, Bhopal Express</p>
+                </div>
+            </div>
+
+            <!-- Goa -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Goa" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">Goa</h2>
+                    <p class="state-poem">
+                        "Where beaches meet the setting sun,<br>
+                        And cultures blend to become one.<br>
+                        Lighthearted tales with depth below,<br>
+                        Goan cinema's vibrant glow."
+                    </p>
+                    <p class="movie-example">Example: Finding Fanny, Aleesha</p>
+                </div>
+            </div>
+
+            <!-- Haryana -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Haryana" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">Haryana</h2>
+                    <p class="state-poem">
+                        "Land of wrestlers, strong and proud,<br>
+                        Where rural voices speak out loud.<br>
+                        From sports to social change they show,<br>
+                        Haryana's cinematic flow."
+                    </p>
+                    <p class="movie-example">Example: Dangal, Sultan</p>
+                </div>
+            </div>
+
+            <!-- Chhattisgarh -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Chhattisgarh" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">Chhattisgarh</h2>
+                    <p class="state-poem">
+                        "Where forests whisper ancient lore,<br>
+                        And tribal arts we can't ignore.<br>
+                        Emerging voices strong and clear,<br>
+                        Chhattisgarh's films we hold dear."
+                    </p>
+                    <p class="movie-example">Example: Bhuvan Shome, Sonchiriya</p>
+                </div>
+            </div>
+
+            <!-- Jharkhand -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Jharkhand" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">Jharkhand</h2>
+                    <p class="state-poem">
+                        "Land of forests, mines and might,<br>
+                        Where struggles merge with dreams so bright.<br>
+                        Raw and real, these stories shine,<br>
+                        Jharkhand's cinematic line."
+                    </p>
+                    <p class="movie-example">Example: Udaan, Gangs of Wasseypur</p>
+                </div>
+            </div>
+
+            <!-- Uttarakhand -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Uttarakhand" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">Uttarakhand</h2>
+                    <p class="state-poem">
+                        "Where Himalayas touch the sky,<br>
+                        And holy rivers rush on by.<br>
+                        Mountain tales both old and new,<br>
+                        Uttarakhand's cinematic view."
+                    </p>
+                    <p class="movie-example">Example: Pahuna, The Gold-Laden Sheep</p>
+                </div>
+            </div>
+                 <!-- Himachal Pradesh -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Himachal Pradesh" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">Himachal Pradesh</h2>
+                    <p class="state-poem">
+                        "Where apple orchards meet the snow,<br>
+                        And mountain winds of stories blow.<br>
+                        Simple lives in frames so grand,<br>
+                        Himachal's cinematic land."
+                    </p>
+                    <p class="movie-example">Example: The Sky is Pink, Highway</p>
+                </div>
+            </div>
+
+            <!-- Manipur -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Manipur" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">Manipur</h2>
+                    <p class="state-poem">
+                        "Where Loktak's waters gently sway,<br>
+                        And filmmakers find their way.<br>
+                        Through conflict and culture, stories rise,<br>
+                        Manipuri cinema's precious prize."
+                    </p>
+                    <p class="movie-example">Example: Lady of the Lake, The Manipuri Mayek</p>
+                </div>
+            </div>
+
+            <!-- Meghalaya -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Meghalaya" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">Meghalaya</h2>
+                    <p class="state-poem">
+                        "Where clouds embrace the Khasi hills,<br>
+                        And indigenous culture spills.<br>
+                        Emerging voices strong and clear,<br>
+                        Meghalaya's films we hold dear."
+                    </p>
+                    <p class="movie-example">Example: Onaatah, The Coffin Maker</p>
+                </div>
+            </div>
+
+            <!-- Nagaland -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Nagaland" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">Nagaland</h2>
+                    <p class="state-poem">
+                        "Where warrior tribes once proudly stood,<br>
+                        Now filmmakers shape the good.<br>
+                        Through lens and light, their stories grow,<br>
+                        Nagaland's cinematic show."
+                    </p>
+                    <p class="movie-example">Example: The Head Hunter, A Thousand Stories</p>
+                </div>
+            </div>
+
+            <!-- Sikkim -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Sikkim" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">Sikkim</h2>
+                    <p class="state-poem">
+                        "Where Kangchenjunga touches sky,<br>
+                        And Buddhist prayers float on high.<br>
+                        Small but mighty, stories bloom,<br>
+                        Sikkim's films break the gloom."
+                    </p>
+                    <p class="movie-example">Example: Pahuna, The Himalayan Kid</p>
+                </div>
+            </div>
+
+            <!-- Tripura -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Tripura" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">Tripura</h2>
+                    <p class="state-poem">
+                        "Where bamboo groves and palaces stand,<br>
+                        And diverse cultures hand in hand.<br>
+                        Emerging voices from the east,<br>
+                        Tripura's cinematic feast."
+                    </p>
+                    <p class="movie-example">Example: The Journey of a Tribal Filmmaker</p>
+                </div>
+            </div>
+
+            <!-- arunachal pradesh -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="ArunachalPradesh" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">ArunachalPradesh</h2>
+                    <p class="state-poem">
+                      Cinema blooms where mountains rise high,
+<br>
+Stories echo under the monsoon sky,
+<br>
+Rooted in culture, simple yet bold,
+<br>
+Arunachal’s films let its soul unfold.
+<br>
+                    </p>
+                    <p class="movie-example">Example: Crossing Bridges,The Silence of the Hornbill</p>
+                </div>
+            </div>
+          <!-- Telangana -->
+            <div class="state-card">
+                <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Tripura" class="state-image">
+                <div class="state-content">
+                    <h2 class="state-name">Telangana</h2>
+                    <p class="state-poem">
+                       Telugu tales with Telangana tone,
+<br>
+From village hearts to dreams well-known,
+<br>
+With woven threads and love so free,
+<br>
+The screen echoes its legacy.
+<br>
+
+
+                    </p>
+                    <p class="movie-example">Example: Mallesham, Dor</p>
+                </div>
+            </div>
+      </div>
+  </div>
+          
+
+    <footer>
+        <p>Explore the rich tapestry of Indian cinema through its regional flavors</p>
+        <p>© 2023 Cinematic India | All rights reserved</p>
+    </footer>
+</body>
+</html>

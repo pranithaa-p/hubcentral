@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventHub - Book Event Tickets</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6d28d9;
+            --secondary-color: #14b8a6;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --text-dark: #334155;
+            --text-light: #94a3b8;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --border-radius: 8px;
+            --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --glow-shadow: 0 0 10px rgba(109, 40, 217, 0.3);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to bottom, var(--light-color), rgba(20, 184, 166, 0.1));
+            color: var(--text-dark);
+            overflow-x: hidden;
+            overflow-y: hidden;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(30, 41, 59, 0.9);
+            transition: var(--transition);
+            z-index: 1000;
+        }
+
+        header.scrolled {
+            background: var(--dark-color);
+            box-shadow: var(--box-shadow);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-icon {
+            color: var(--light-color);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .back-icon:hover,
+        .back-icon:focus {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--light-color);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a:focus::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover,
+        .nav-links a:focus {
+            color: var(--primary-color);
+        }
+
+        .profile-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--gradient);
+            color: var(--light-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid var(--light-color);
+            transition: var(--transition);
+        }
+
+        .profile-icon:hover,
+        .profile-icon:focus {
+            transform: scale(1.08);
+            box-shadow: var(--glow-shadow);
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: 60px;
+            right: 1.5rem;
+            background: var(--light-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            display: none;
+            flex-direction: column;
+            width: 200px;
+            z-index: 200;
+            overflow: hidden;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .profile-dropdown.active {
+            display: flex;
+        }
+
+        .profile-info {
+            padding: 1rem;
+            border-bottom: 1px solid var(--text-light);
+        }
+
+        .profile-info p {
+            margin: 0.4rem 0;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+
+        .profile-dropdown button {
+            background: none;
+            border: none;
+            padding: 1rem;
+            text-align: left;
+            color: var(--primary-color);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .profile-dropdown button:hover,
+        .profile-dropdown button:focus {
+            background: var(--primary-color);
+            color: var(--light-color);
+        }
+
+        .hamburger {
+            display: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            color: var(--light-color);
+            background: none;
+            border: none;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: calc(100vh - 140px);
+            background-image: url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            z-index: 1;
+            animation: parallax 25s infinite linear;
+            flex: 1;
+        }
+
+        @keyframes parallax {
+            0% { background-position: center top; }
+            50% { background-position: center bottom; }
+            100% { background-position: center top; }
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(109, 40, 217, 0.5), rgba(20, 184, 166, 0.5));
+            z-index: 2;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            max-width: 700px;
+            padding: 1.5rem;
+            color: var(--light-color);
+            animation: fadeIn 1.2s ease-in-out;
+        }
+
+        .hero-content h1 {
+            font-size: 3.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+            animation: slideUp 1s ease;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            line-height: 1.5;
+            animation: slideUp 1.2s ease 0.2s;
+        }
+
+        .hero-content .btn {
+            background: var(--gradient);
+            color: var(--light-color);
+            padding: 0.9rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: var(--border-radius);
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--glow-shadow);
+        }
+
+        .hero-content .btn:hover,
+        .hero-content .btn:focus {
+            background: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 0 15px rgba(109, 40, 217, 0.5);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.65);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--light-color);
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 680px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--box-shadow);
+            position: relative;
+            border: 1px solid var(--primary-color);
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .modal-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover,
+        .modal-close:focus {
+            color: var(--secondary-color);
+            transform: scale(1.1);
+        }
+
+        .modal-header {
+            padding: 1.2rem;
+            background: var(--dark-color);
+            color: var(--light-color);
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.6rem;
+            font-weight: 600;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .state-search {
+            width: 100%;
+            padding: 0.7rem;
+            margin-bottom: 1.2rem;
+            border: 1px solid var(--text-light);
+            border-radius: var(--border-radius);
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .state-search:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: var(--glow-shadow);
+        }
+
+        .state-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 0.8rem;
+        }
+
+        .state-card {
+            position: relative;
+            height: 110px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            cursor: pointer;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: var(--box-shadow);
+        }
+
+        .state-card:hover {
+            transform: scale(1.04);
+            box-shadow: 0 6px 20px rgba(109, 40, 217, 0.25);
+        }
+
+        .state-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.45), transparent);
+            z-index: 1;
+        }
+
+        .state-name {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            color: var(--light-color);
+            font-size: 1rem;
+            font-weight: 600;
+            z-index: 2;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .state-card[data-name="West Bengal"] {
+            order: 9999;
+            grid-column: 2 / 3;
+        }
+
+        /* Footer */
+        footer {
+            position: sticky;
+            bottom: 0;
+            width: 100%;
+            background: linear-gradient(180deg, var(--dark-color), var(--secondary-color));
+            color: var(--light-color);
+            padding: 1rem;
+            text-align: center;
+            z-index: 500;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1rem;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover,
+        .footer-links a:focus {
+            color: var(--primary-color);
+        }
+
+        .social-links a {
+            color: var(--light-color);
+            font-size: 1.1rem;
+            margin: 0 0.4rem;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover,
+        .social-links a:focus {
+            color: var(--primary-color);
+            transform: scale(1.15);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background: var(--dark-color);
+                padding: 1rem;
+                box-shadow: var(--box-shadow);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .state-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero-content h1 {
+                font-size: 2.8rem;
+            }
+
+            .hero-content p {
+                font-size: 1rem;
+            }
+
+            .profile-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 1rem;
+            }
+
+            .profile-dropdown {
+                width: 180px;
+                top: 50px;
+            }
+
+            .back-icon {
+                font-size: 1.1rem;
+            }
+
+            .state-card[data-name="West Bengal"] {
+                grid-column: 1 / 2;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .state-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-content h1 {
+                font-size: 2.4rem;
+            }
+
+            .hero-content p {
+                font-size: 0.9rem;
+            }
+
+            .state-card {
+                height: 100px;
+            }
+
+            .state-name {
+                font-size: 0.9rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+
+            .profile-icon {
+                width: 28px;
+                height: 28px;
+                font-size: 0.9rem;
+            }
+
+            .back-icon {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="nav-left">
+                <a href="index.html" class="back-icon" aria-label="Back to Home"><i class="fas fa-arrow-left"></i></a>
+                <div class="logo">EventHub</div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" aria-current="page">Home</a></li>
+                <li><a href="#">Events</a></li>
+                <li><a href="#">Venues</a></li>
+                <li><a href="eoffer.html">Offers</a></li>
+                <li><a href="eabout.html">About</a></li>
+            </ul>
+            <div class="profile-container">
+                <div id="profile-icon" class="profile-icon" aria-label="User profile avatar"></div>
+                <div id="profile-dropdown" class="profile-dropdown">
+                    <div class="profile-info">
+                        <p><strong>Name:</strong> <span id="profile-name"></span></p>
+                        <p><strong>Email:</strong> <span id="profile-email"></span></p>
+                    </div>
+                    <button id="signout-btn">Sign Out</button>
+                </div>
+            </div>
+            <button class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false"><i class="fas fa-bars"></i></button>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Welcome to EventHub</h1>
+            <p>Book your event tickets seamlessly across India. Select your state to explore concerts, festivals, and more!</p>
+            <button class="btn" onclick="openStateModal()">Choose Your State</button>
+        </div>
+    </section>
+
+    <!-- State Selection Modal -->
+    <div id="state-modal" class="modal" role="dialog" aria-labelledby="state-selection" aria-modal="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="state-selection">Select Your State</h2>
+                <button class="modal-close" aria-label="Close state selection modal">×</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="state-search" placeholder="Search states..." aria-label="Search states">
+                <div class="state-grid">
+                    <div class="state-card" data-url="eandhra-pradesh.html" data-image="https://s7ap1.scene7.com/is/image/incredibleindia/Dhyana%20Buddha%20Statue-%20Amaravati-Vijayawada-Andhra%20Pradesh-hero-hs?qlt=82&ts=1726743646729" data-name="Andhra Pradesh">
+                        <span class="state-name">Andhra Pradesh</span>
+                    </div>
+                    <div class="state-card" data-url="earunachal-pradesh.html" data-image="https://www.tgetravels.com/wp-content/uploads/2024/05/5f182daa3b7c6-2.jpg" data-name="Arunachal Pradesh">
+                        <span class="state-name">Arunachal Pradesh</span>
+                    </div>
+                    <div class="state-card" data-url="eassam.html" data-image="https://static.wixstatic.com/media/e58556_8f92b9a19d1e4771bc5580c8e6538b0f~mv2.jpg/v1/fill/w_568,h_378,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/e58556_8f92b9a19d1e4771bc5580c8e6538b0f~mv2.jpg" data-name="Assam">
+                        <span class="state-name">Assam</span>
+                    </div>
+                    <div class="state-card" data-url="ebihar.html" data-image="https://assets.thehansindia.com/h-upload/2023/07/01/1361998-bihar-museum.webp" data-name="Bihar">
+                        <span class="state-name">Bihar</span>
+                    </div>
+                    <div class="state-card" data-url="echhattisgarh.html" data-image="https://theindiantribal.com/wp-content/uploads/2021/09/chhattisgarh-3.jpg" data-name="Chhattisgarh">
+                        <span class="state-name">Chhattisgarh</span>
+                    </div>
+                    <div class="state-card" data-url="egoa.html" data-image="https://yu-hotel.com/wp-content/uploads/2023/03/best-luxury-hotels-in-north-goa-YU-Hotel.jpg" data-name="Goa">
+                        <span class="state-name">Goa</span>
+                    </div>
+                    <div class="state-card" data-url="egujarat.html" data-image="https://www.akshartours.com/wp-content/uploads/2022/12/AnyConv.com__download-15.jpg" data-name="Gujarat">
+                        <span class="state-name">Gujarat</span>
+                    </div>
+                    <div class="state-card" data-url="eharyana.html" data-image="https://assets.architecturaldigest.in/photos/600850011b516d492c3ab45e/master/w_1600%2Cc_limit/noor-mahal-karnal-haryana-interior-design_4.jpg" data-name="Haryana">
+                        <span class="state-name">Haryana</span>
+                    </div>
+                    <div class="state-card" data-url="ehimachal-pradesh.html" data-image="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/15/33/fc/f5/himachal-pradesh.jpg?w=1400&h=1400&s=1" data-name="Himachal Pradesh">
+                        <span class="state-name">Himachal Pradesh</span>
+                    </div>
+                    <div class="state-card" data-url="ejharkhand.html" data-image="https://plus.unsplash.com/premium_photo-1691031429261-aeb324882888?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8amhhcmtoYW5kfGVufDB8fDB8fHww" data-name="Jharkhand">
+                        <span class="state-name">Jharkhand</span>
+                    </div>
+                    <div class="state-card" data-url="ekarnataka.html" data-image="https://s7ap1.scene7.com/is/image/incredibleindia/virupaksha-temple-hampi-karnataka-1-attr-nearby?qlt=82&ts=1726721690964" data-name="Karnataka">
+                        <span class="state-name">Karnataka</span>
+                    </div>
+                    <div class="state-card" data-url="ekerala.html" data-image="https://t4.ftcdn.net/jpg/01/64/62/13/360_F_164621341_vA1ZtJNeXpctAy7ASvEMtl5R6RG1pzOa.jpg" data-name="Kerala">
+                        <span class="state-name">Kerala</span>
+                    </div>
+                    <div class="state-card" data-url="emadhya-pradesh.html" data-image="https://media.istockphoto.com/id/508628776/photo/sunset-over-kandariya-mahadeva-temple.jpg?s=612x612&w=0&k=20&c=YOpVZmLiY4ccl_aoWRJhfqLpNEDgjyOGuTAKbobCO-U=" data-name="Madhya Pradesh">
+                        <span class="state-name">Madhya Pradesh</span>
+                    </div>
+                    <div class="state-card" data-url="emaharashtra.html" data-image="https://s7ap1.scene7.com/is/image/incredibleindia/gateway-of-india-mumbai-maharashtra-2-attr-hero?qlt=82&ts=1727355556744" data-name="Maharashtra">
+                        <span class="state-name">Maharashtra</span>
+                    </div>
+                    <div class="state-card" data-url="emanipur.html" data-image="https://travelsetu.com/apps/uploads/new_destinations_photos/destination/2024/01/18/28109dd9be69111c4cccd23c69ccd311_1000x1000.jpg" data-name="Manipur">
+                        <span class="state-name">Manipur</span>
+                    </div>
+                    <div class="state-card" data-url="emeghalaya.html" data-image="https://static.toiimg.com/photo/68332245.cms" data-name="Meghalaya">
+                        <span class="state-name">Meghalaya</span>
+                    </div>
+                    <div class="state-card" data-url="emizoram.html" data-image="https://pioneertechnoconsultant.com/wp-content/uploads/2023/01/blogimg_24_798b1ed1842bccc7d08e3af3c11a458e.webp" data-name="Mizoram">
+                        <span class="state-name">Mizoram</span>
+                    </div>
+                    <div class="state-card" data-url="enagaland.html" data-image="https://gbi-assets.s3.ap-south-1.amazonaws.com/images/post/nagaland-banner-1692698632451154.jpeg" data-name="Nagaland">
+                        <span class="state-name">Nagaland</span>
+                    </div>
+                    <div class="state-card" data-url="eodisha.html" data-image="https://assets.traveltriangle.com/blog/wp-content/uploads/2016/11/Suntemple-Konark.jpg" data-name="Odisha">
+                        <span class="state-name">Odisha</span>
+                    </div>
+                    <div class="state-card" data-url="epunjab.html" data-image="https://thumbs.dreamstime.com/b/humayuns-tomb-blue-sky-new-delhi-india-34788053.jpg" data-name="Punjab">
+                        <span class="state-name">Punjab</span>
+                    </div>
+                    <div class="state-card" data-url="erajasthan.html" data-image="https://s7ap1.scene7.com/is/image/incredibleindia/hawa-mahal-jaipur-rajasthan-city-1-hero?qlt=82&ts=1726660605161" data-name="Rajasthan">
+                        <span class="state-name">Rajasthan</span>
+                    </div>
+                    <div class="state-card" data-url="esikkim.html" data-image="https://media.istockphoto.com/id/687689872/photo/buddha-park-rabangla-sikkim.jpg?s=612x612&w=0&k=20&c=Qyv5tZifCjrKocUtcTZ8J95D7nQpseY0eFQAAR9P0z4=" data-name="Sikkim">
+                        <span class="state-name">Sikkim</span>
+                    </div>
+                    <div class="state-card" data-url="etamil-nadu.html" data-image="https://media.istockphoto.com/id/490736905/photo/meenakshi-hindu-temple-in-madurai-tamil-nadu-south-india.jpg?s=612x612&w=0&k=20&c=OlOLvdryIdkdyKcY9gRPsM1RZa5HiP6QBr2JVAIvPb0=" data-name="Tamil Nadu">
+                        <span class="state-name">Tamil Nadu</span>
+                    </div>
+                    <div class="state-card" data-url="etelangana.html" data-image="https://hyderabadtourpackage.in/images/places-to-visit/charminar-hyderabad-entryfee-timings-tour-package-header.jpg" data-name="Telangana">
+                        <span class="state-name">Telangana</span>
+                    </div>
+                    <div class="state-card" data-url="etripura.html" data-image="https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Unakotiswara_Kal_Bhairava%2CUnakoti_%28_%E0%A6%8A%E0%A6%A8%E0%A6%95%E0%A7%8B%E0%A6%9F%E0%A6%BF%29.JPG/1200px-Unakotiswara_Kal_Bhairava%2CUnakoti_%28_%E0%A6%8A%E0%A6%A8%E0%A6%95%E0%A7%8B%E0%A6%9F%E0%A6%BF%29.JPG" data-name="Tripura">
+                        <span class="state-name">Tripura</span>
+                    </div>
+                    <div class="state-card" data-url="euttar-pradesh.html" data-image="https://media.admiddleeast.com/photos/67bf29d7cf3e24ef025e4ff6/1:1/w_3249,h_3249,c_limit/GettyImages-506115180.jpg" data-name="Uttar Pradesh">
+                        <span class="state-name">Uttar Pradesh</span>
+                    </div>
+                    <div class="state-card" data-url="euttarakhand.html" data-image="https://s7ap1.scene7.com/is/image/incredibleindia/lansdowne-hills-lansdowne-uttrakhand-city-1-hero?qlt=82&ts=1726646980478" data-name="Uttarakhand">
+                        <span class="state-name">Uttarakhand</span>
+                    </div>
+                    <div class="state-card" data-url="ewest-bengal.html" data-image="https://s7ap1.scene7.com/is/image/incredibleindia/1-howrah-bridge-kolkata-west-bengal-city-hero?qlt=82&ts=1726642884073" data-name="West Bengal">
+                        <span class="state-name">West Bengal</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>© 2025 EventHub. All rights reserved.</p>
+            <ul class="footer-links">
+                <li><a href="#">About Events</a></li>
+                <li><a href="#">Contact Organizers</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+            </ul>
+            <div class="social-links">
+                <a href="https://facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://youtube.com" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="https://instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://twitter.com" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Elements
+            const stateModal = document.getElementById('state-modal');
+            const stateModalContent = stateModal.querySelector('.modal-content');
+            const stateCloseBtn = stateModal.querySelector('.modal-close');
+            const stateCards = document.querySelectorAll('.state-card');
+            const searchInput = document.querySelector('.state-search');
+            const profileIcon = document.getElementById('profile-icon');
+            const profileDropdown = document.getElementById('profile-dropdown');
+            const signoutBtn = document.getElementById('signout-btn');
+            const profileName = document.getElementById('profile-name');
+            const profileEmail = document.getElementById('profile-email');
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            const header = document.querySelector('header');
+
+            // Mandatory Sign-In Check
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+            const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+            if (!isLoggedIn || !user.username) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Update Profile UI
+            const updateProfileUI = () => {
+                try {
+                    const firstLetter = user.username.charAt(0).toUpperCase();
+                    profileIcon.textContent = firstLetter;
+                    profileIcon.setAttribute('aria-label', `User profile avatar with letter ${firstLetter}`);
+                    profileName.textContent = user.username;
+                    profileEmail.textContent = user.email;
+                    console.log('Profile updated:', { username: user.username, email: user.email });
+                } catch (error) {
+                    console.error('Error updating profile UI:', error);
+                    profileIcon.textContent = 'U';
+                }
+            };
+            updateProfileUI();
+
+            // Profile Dropdown Toggle
+            profileIcon.addEventListener('click', () => {
+                profileDropdown.classList.toggle('active');
+            });
+
+            profileIcon.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    profileDropdown.classList.toggle('active');
+                }
+            });
+
+            // Sign Out
+            signoutBtn.addEventListener('click', () => {
+                sessionStorage.removeItem('isLoggedIn');
+                sessionStorage.removeItem('user');
+                alert('Signed out successfully!');
+                window.location.href = 'index.html';
+            });
+
+            // Hamburger Menu Toggle
+            if (hamburger && navLinks) {
+                hamburger.addEventListener('click', () => {
+                    const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+                    navLinks.classList.toggle('active');
+                    hamburger.setAttribute('aria-expanded', !isExpanded);
+                });
+
+                navLinks.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        if (window.innerWidth <= 768) {
+                            navLinks.classList.remove('active');
+                            hamburger.setAttribute('aria-expanded', 'false');
+                        }
+                    });
+                });
+            }
+
+            // Header Scroll Effect
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('scrolled', window.scrollY > 50);
+            });
+
+            // State Modal Functions
+            window.openStateModal = () => {
+                stateModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            };
+
+            const hideStateModal = () => {
+                stateModal.style.display = 'none';
+                document.body.style.overflow = 'hidden';
+            };
+
+            if (stateCloseBtn) {
+                stateCloseBtn.addEventListener('click', hideStateModal);
+                stateCloseBtn.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        hideStateModal();
+                    }
+                });
+            }
+
+            stateCards.forEach(card => {
+                card.setAttribute('tabindex', '0');
+                card.addEventListener('click', () => {
+                    try {
+                        const url = card.getAttribute('data-url');
+                        window.location.href = url;
+                    } catch (error) {
+                        console.error('Error navigating to state page:', error);
+                        alert('An error occurred while selecting the state. Please try again.');
+                    }
+                });
+                card.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        card.click();
+                    }
+                });
+            });
+
+            if (searchInput) {
+                searchInput.addEventListener('input', () => {
+                    const query = searchInput.value.toLowerCase();
+                    stateCards.forEach(card => {
+                        const stateName = card.getAttribute('data-name').toLowerCase();
+                        card.style.display = stateName.includes(query) ? 'block' : 'none';
+                    });
+                });
+            }
+
+            // Lazy Load State Card Images
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const card = entry.target;
+                        const imageUrl = card.getAttribute('data-image');
+                        if (imageUrl) {
+                            card.style.backgroundImage = `url(${imageUrl})`;
+                        }
+                        observer.unobserve(card);
+                    }
+                });
+            }, { rootMargin: '0px 0px 50px 0px' });
+
+            stateCards.forEach(card => observer.observe(card));
+
+            // Close Modal on Escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && stateModal.style.display === 'flex') {
+                    hideStateModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

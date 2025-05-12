@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirHub - Book Your Flight</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0284c7;
+            --secondary-color: #e0f2fe;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --text-dark: #334155;
+            --text-light: #94a3b8;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --border-radius: 12px;
+            --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            --glow-shadow: 0 0 10px rgba(2, 132, 199, 0.5);
+            --transition: all 0.3s ease;
+        }
+
+        html {
+            overflow-y: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2070&auto=format&fit=crop') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--light-color);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        main {
+            flex: 1 0 auto;
+            margin-bottom: 50px;
+        }
+
+        header {
+            background: var(--dark-color);
+            color: var(--light-color);
+            padding: 1rem 2rem;
+            box-shadow: var(--box-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--light-color);
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            color: var(--light-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover, .nav-links a:focus {
+            color: var(--primary-color);
+            text-shadow: var(--glow-shadow);
+        }
+
+        .profile-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient);
+            color: var(--light-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: 2px solid var(--light-color);
+            transition: var(--transition);
+        }
+
+        .profile-avatar:hover, .profile-avatar:focus {
+            box-shadow: var(--glow-shadow);
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: var(--light-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            display: none;
+            flex-direction: column;
+            width: 200px;
+            z-index: 200;
+        }
+
+        .profile-dropdown.active {
+            display: flex;
+        }
+
+        .profile-info {
+            padding: 1rem;
+            border-bottom: 1px solid var(--text-light);
+        }
+
+        .profile-info p {
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+
+        .profile-dropdown button {
+            background: none;
+            border: none;
+            padding: 1rem;
+            text-align: left;
+            color: var(--primary-color);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .profile-dropdown button:hover, .profile-dropdown button:focus {
+            background: var(--primary-color);
+            color: var(--light-color);
+        }
+
+        .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--light-color);
+            background: none;
+            border: none;
+        }
+
+        .hero {
+            text-align: center;
+            margin: 2rem auto;
+            max-width: 700px;
+            padding: 0 20px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            backdrop-filter: blur(5px);
+            margin: 2rem auto;
+            max-width: 1200px;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .search-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-card {
+            flex: 1;
+            min-width: 180px;
+            background: #fff;
+            border-radius: 8px;
+            padding: 0.75rem;
+            text-align: left;
+            border: 1px solid #e5e7eb;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .form-card:focus-within {
+            box-shadow: var(--glow-shadow);
+        }
+
+        .form-card label {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            font-weight: 500;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-card select, .form-card input {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            background: #f8fafc;
+            color: var(--text-dark);
+            transition: box-shadow 0.3s;
+        }
+
+        .form-card select:focus, .form-card input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--primary-color);
+        }
+
+        .swap-btn {
+            background: var(--dark-color);
+            border: none;
+            color: var(--light-color);
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+            margin: 0 0.5rem;
+        }
+
+        .swap-btn:hover {
+            background: var(--primary-color);
+            transform: rotate(90deg);
+        }
+
+        .search-btn {
+            background: var(--gradient);
+            color: #fff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .search-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+
+        .options {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        .options label {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .options input[type="checkbox"] {
+            margin-right: 0.25rem;
+            accent-color: var(--primary-color);
+        }
+
+        .multi-city-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            transition: color 0.3s;
+        }
+
+        .multi-city-link:hover {
+            color: var(--secondary-color);
+        }
+
+        footer {
+            background: rgba(30, 41, 59, 0.9);
+            color: var(--light-color);
+            padding: 1rem;
+            width: 100%;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .footer-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover, .footer-links a:focus {
+            color: var(--primary-color);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: var(--light-color);
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover, .social-links a:focus {
+            color: var(--primary-color);
+            transform: scale(1.2);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: var(--dark-color);
+                padding: 1rem;
+                box-shadow: var(--box-shadow);
+            }
+
+            .nav-links[style*="display: flex"] {
+                display: flex !important;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .search-form {
+                flex-direction: column;
+            }
+
+            .form-card {
+                flex: 100%;
+            }
+
+            .swap-btn {
+                margin: 0.5rem 0;
+            }
+
+            .search-btn {
+                width: 100%;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+
+            .profile-avatar {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+
+            .profile-dropdown {
+                width: 180px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero p {
+                font-size: 0.9rem;
+            }
+
+            .form-card {
+                min-width: 150px;
+            }
+
+            .form-card select, .form-card input {
+                padding: 0.6rem;
+                font-size: 0.9rem;
+            }
+
+            footer {
+                font-size: 0.8rem;
+            }
+
+            .profile-avatar {
+                width: 30px;
+                height: 30px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav role="navigation">
+            <div class="logo">AirHub</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#" aria-current="page">Flights</a></li>
+                <li><a href="airports.html">Airports</a></li>
+                <li><a href="foffer.html">Offers</a></li>
+                <li><a href="fabout.html">About</a></li>
+            </ul>
+            <div class="profile-container">
+                <div id="profile-image" class="profile-avatar" aria-label="User profile avatar"></div>
+                <div id="profile-dropdown" class="profile-dropdown">
+                    <div class="profile-info">
+                        <p><strong>Name:</strong> <span id="profile-name"></span></p>
+                        <p><strong>Email:</strong> <span id="profile-email"></span></p>
+                    </div>
+                    <button id="signout-btn">Sign Out</button>
+                </div>
+            </div>
+            <button class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">☰</button>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="hero">
+            <h1>Embark on Your Next Journey</h1>
+            <p>Explore India with AirHub – your gateway to seamless travel.</p>
+        </div>
+        <section class="search-section">
+            <a href="#" class="multi-city-link"><i class="fas fa-plus-circle"></i> Create a multi-city route</a>
+            <form id="searchForm" class="search-form">
+                <div class="form-card">
+                    <label for="from">From</label>
+                    <select id="from" required>
+                        <option value="" disabled selected>Select city</option>
+                        <option value="Delhi (DEL)">Delhi (DEL)</option>
+                        <option value="Mumbai (BOM)">Mumbai (BOM)</option>
+                        <option value="Bengaluru (BLR)">Bengaluru (BLR)</option>
+                        <option value="Hyderabad (HYD)">Hyderabad (HYD)</option>
+                        <option value="Chennai (MAA)">Chennai (MAA)</option>
+                        <option value="Kolkata (CCU)">Kolkata (CCU)</option>
+                    </select>
+                </div>
+                <button type="button" id="swapBtn" class="swap-btn" title="Swap Cities"><i class="fas fa-exchange-alt"></i></button>
+                <div class="form-card">
+                    <label for="to">To</label>
+                    <select id="to" required>
+                        <option value="" disabled selected>Select city</option>
+                        <option value="Delhi (DEL)">Delhi (DEL)</option>
+                        <option value="Mumbai (BOM)">Mumbai (BOM)</option>
+                        <option value="Bengaluru (BLR)">Bengaluru (BLR)</option>
+                        <option value="Hyderabad (HYD)">Hyderabad (HYD)</option>
+                        <option value="Chennai (MAA)">Chennai (MAA)</option>
+                        <option value="Kolkata (CCU)">Kolkata (CCU)</option>
+                    </select>
+                </div>
+                <div class="form-card">
+                    <label for="depart">Depart</label>
+                    <input type="date" id="depart" required min="2025-04-26">
+                </div>
+                <div class="form-card">
+                    <label for="return">Return</label>
+                    <input type="date" id="return">
+                </div>
+                <div class="form-card">
+                    <label for="passengers">Travellers</label>
+                    <input type="number" id="passengers" min="1" value="1" required>
+                </div>
+                <div class="form-card">
+                    <label for="class">Cabin Class</label>
+                    <select id="class" required>
+                        <option value="economy">Economy</option>
+                        <option value="premium-economy">Premium Economy</option>
+                        <option value="business">Business</option>
+                        <option value="first">First Class</option>
+                    </select>
+                </div>
+                <button type="submit" class="search-btn">Search Flights</button>
+            </form>
+            <div class="options">
+                <label><input type="checkbox" id="nearbyFrom"> Add nearby airports (From)</label>
+                <label><input type="checkbox" id="nearbyTo"> Add nearby airports (To)</label>
+                <label><input type="checkbox" id="directFlights"> Direct flights only</label>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>© 2025 AirHub. All rights reserved.</p>
+            <ul class="footer-links">
+                <li><a href="#">About Flights</a></li>
+                <li><a href="#">Contact Support</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+            </ul>
+            <div class="social-links">
+                <a href="https://facebook.com" target="_blank" aria-label="Follow us on Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://youtube.com" target="_blank" aria-label="Follow us on YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="https://instagram.com" target="_blank" aria-label="Follow us on Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://twitter.com" target="_blank" aria-label="Follow us on Twitter"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Profile Management
+        const profileImage = document.getElementById('profile-image');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        const signoutBtn = document.getElementById('signout-btn');
+        const profileName = document.getElementById('profile-name');
+        const profileEmail = document.getElementById('profile-email');
+
+        function updateProfileUI() {
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+            const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+            if (isLoggedIn && user.username && user.email) {
+                const firstLetter = user.username.charAt(0).toUpperCase();
+                profileImage.textContent = firstLetter;
+                profileImage.setAttribute('aria-label', `User profile avatar with letter ${firstLetter}`);
+                profileName.textContent = user.username;
+                profileEmail.textContent = user.email;
+                profileImage.style.display = 'flex';
+            } else {
+                // Redirect to HubCentral sign-in
+                sessionStorage.setItem('redirectUrl', window.location.href);
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Update profile when sessionStorage changes (e.g., sign-in in another tab)
+        window.addEventListener('storage', (event) => {
+            if (event.key === 'user' || event.key === 'isLoggedIn') {
+                updateProfileUI();
+            }
+        });
+
+        profileImage.addEventListener('click', () => {
+            profileDropdown.classList.toggle('active');
+        });
+
+        profileImage.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                profileDropdown.classList.toggle('active');
+            }
+        });
+
+        signoutBtn.addEventListener('click', () => {
+            sessionStorage.removeItem('user');
+            sessionStorage.removeItem('isLoggedIn');
+            sessionStorage.setItem('redirectUrl', window.location.href);
+            window.location.href = 'index.html';
+        });
+
+        // Initialize profile
+        updateProfileUI();
+
+        // Form Logic
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('depart').setAttribute('min', today);
+
+        document.getElementById('depart').addEventListener('change', () => {
+            const departDate = document.getElementById('depart').value;
+            document.getElementById('return').setAttribute('min', departDate);
+        });
+
+        document.getElementById('swapBtn').addEventListener('click', () => {
+            const from = document.getElementById('from');
+            const to = document.getElementById('to');
+            [from.value, to.value] = [to.value, from.value];
+        });
+
+        document.getElementById('searchForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = {
+                from: document.getElementById('from').value,
+                to: document.getElementById('to').value,
+                depart: document.getElementById('depart').value,
+                return: document.getElementById('return').value,
+                passengers: parseInt(document.getElementById('passengers').value),
+                class: document.getElementById('class').value,
+                nearbyFrom: document.getElementById('nearbyFrom').checked,
+                nearbyTo: document.getElementById('nearbyTo').checked,
+                directFlights: document.getElementById('directFlights').checked
+            };
+            const queryParams = new URLSearchParams({
+                from: formData.from,
+                to: formData.to,
+                depart: formData.depart,
+                return: formData.return,
+                passengers: formData.passengers,
+                class: formData.class,
+                nearbyFrom: formData.nearbyFrom,
+                nearbyTo: formData.nearbyTo,
+                directFlights: formData.directFlights
+            }).toString();
+            window.location.href = `airports.html?${queryParams}`;
+        });
+
+        // Hamburger Menu
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        hamburger.addEventListener('click', () => {
+            const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+            navLinks.style.display = isExpanded ? 'none' : 'flex';
+            hamburger.setAttribute('aria-expanded', !isExpanded);
+        });
+
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    navLinks.style.display = 'none';
+                    hamburger.setAttribute('aria-expanded', 'false');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

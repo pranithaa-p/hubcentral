@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HubCentral - Premier Movies, Events, and Travel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FFD700;
+            --secondary: #FF8C00;
+            --dark: #000000;
+            --light: #E5E5E5;
+            --neutral: #FFFFFF;
+        }
+        
+        html {
+            height: 100%;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        html::-webkit-scrollbar {
+            display: none;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--dark);
+            color: var(--neutral);
+            overflow-y: hidden;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .glass {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+        
+        .neumorphic {
+            background: var(--light);
+            box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.5),
+                        -8px -8px 16px rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        .neumorphic:hover {
+            box-shadow: inset 6px 6px 12px rgba(0, 0, 0, 0.5),
+                        inset -6px -6px 12px rgba(255, 255, 255, 0.1);
+        }
+        
+        .tilt-effect {
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .blob-bg {
+            position: absolute;
+            filter: blur(60px);
+            opacity: 0.2;
+            z-index: -1;
+            border-radius: 50%;
+            contain: strict;
+        }
+        
+        .typing-text::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        
+        .scroll-indicator {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+        
+        .scroll-indicator span {
+            display: block;
+            width: 20px;
+            height: 20px;
+            border-bottom: 2px solid var(--primary);
+            border-right: 2px solid var(--primary);
+            transform: rotate(45deg);
+            margin: -10px;
+            animation: scrollDown 2s infinite;
+        }
+        
+        .scroll-indicator span:nth-child(2) {
+            animation-delay: -0.2s;
+        }
+        
+        .scroll-indicator span:nth-child(3) {
+            animation-delay: -0.4s;
+        }
+        
+        @keyframes scrollDown {
+            0% {
+                opacity: 0;
+                transform: rotate(45deg) translate(-20px, -20px);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: rotate(45deg) translate(20px, 20px);
+            }
+        }
+        
+        .glow {
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+        }
+        
+        .custom-underline {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .custom-underline::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        
+        .custom-underline:hover::after {
+            transform: scaleX(1);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        .lottie-container {
+            overflow: hidden;
+            position: relative;
+        }
+        
+        #mobile-menu {
+            max-height: calc(100vh - 5rem);
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+        
+        #mobile-menu::-webkit-scrollbar {
+            display: none;
+        }
+        
+        nav a, .hero-section h1, .hero-section p, .hub-card h3, .hub-card a, .testimonials h2, .footer h3 {
+            color: var(--neutral);
+        }
+        
+        nav a:hover, .hub-card a:hover, .footer a:hover {
+            color: var(--primary);
+        }
+        
+        .hub-card p, .testimonials p, .footer p, .footer a {
+            color: var(--light);
+        }
+        
+        .testimonials p.font-semibold {
+            color: var(--primary);
+        }
+        
+        .hero-section a, .hub-card a, .cta-section a:first-child {
+            background: var(--primary);
+            color: var(--neutral);
+        }
+        
+        .hero-section a:hover, .hub-card a:hover, .cta-section a:first-child:hover {
+            background: var(--secondary);
+        }
+        
+        .cta-section a:last-child {
+            border-color: var(--primary);
+        }
+        
+        .cta-section a:last-child:hover {
+            background: var(--primary);
+            color: var(--neutral);
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(15px);
+            border-radius: 1.5rem;
+            width: 90%;
+            max-width: 500px;
+            padding: 2.5rem;
+            position: relative;
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+        }
+        
+        .modal-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        .modal-tab {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            cursor: pointer;
+            color: var(--neutral);
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        
+        .modal-tab.active {
+            background: var(--primary);
+            color: var(--dark);
+        }
+        
+        .modal-tab:hover {
+            background: var(--secondary);
+            color: var(--dark);
+        }
+        
+        .modal-form {
+            display: none;
+            text-align: center;
+        }
+        
+        .modal-form.active {
+            display: block;
+        }
+        
+        .modal-form input {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border: none;
+            border-radius: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--neutral);
+            font-size: 1rem;
+            transition: all 0.3s;
+            box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-form input:focus {
+            outline: none;
+            box-shadow: 0 0 10px var(--primary);
+        }
+        
+        .modal-form button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: var(--dark);
+            border: none;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-form button:hover {
+            background: var(--secondary);
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+        }
+        
+        .modal-form .forgot-password {
+            display: block;
+            text-align: right;
+            color: var(--primary);
+            font-size: 0.9rem;
+            margin-top: -1rem;
+            margin-bottom: 1.5rem;
+            transition: color 0.3s;
+        }
+        
+        .modal-form .forgot-password:hover {
+            color: var(--secondary);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.8rem;
+            color: var(--neutral);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: var(--primary);
+        }
+        
+        .message-box {
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0.75rem;
+            text-align: center;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .message-box.success {
+            background: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+        }
+        
+        .message-box.error {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff0000;
+        }
+        
+        .loading-lottie {
+            width: 50px;
+            height: 50px;
+            margin: 1rem auto;
+        }
+        
+        .sign-in-highlight {
+            background: var(--primary);
+            color: var(--dark);
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .sign-in-highlight:hover {
+            background: var(--secondary);
+        }
+        
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+            border: 2px solid var(--secondary);
+            transition: all 0.3s;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
+        .profile-icon:hover {
+            background: var(--secondary);
+            transform: scale(1.1);
+        }
+        
+        /* Parallax Hero Background */
+        .hero-section {
+            background-image: url('https://png.pngtree.com/thumb_back/fh260/background/20230704/pngtree-experience-artful-cinema-from-home-enjoy-popcorn-3d-glasses-and-film-image_3726475.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        
+        .welcome-text {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            padding: 0.5rem;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="relative">
+    <!-- Sign In/Sign Up/Admin Modal -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content glass" data-aos="zoom-in" data-aos-duration="500">
+            <span class="close-modal">×</span>
+            <div class="modal-tabs">
+                <div class="modal-tab active" data-tab="signin">Sign In</div>
+                <div class="modal-tab" data-tab="signup">Sign Up</div>
+                <div class="modal-tab" data-tab="admin">Admin</div>
+            </div>
+            <div id="message-box" class="message-box" style="display: none;"></div>
+            <div id="loading" class="loading-lottie" style="display: none;">
+                <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_9wthwkm0.json" background="transparent" speed="1" loop autoplay></lottie-player>
+            </div>
+            <form id="signin-form" class="modal-form active">
+                <input type="email" id="signin-email" placeholder="Email" required>
+                <input type="password" id="signin-password" placeholder="Password" required>
+                <a href="#" class="forgot-password">Forgot Password?</a>
+                <button type="submit">Sign In</button>
+            </form>
+            <form id="signup-form" class="modal-form">
+                <input type="text" id="signup-username" placeholder="Username" required>
+                <input type="email" id="signup-email" placeholder="Email" required>
+                <input type="password" id="signup-password" placeholder="Password (min 8 characters)" required minlength="8">
+                <button type="submit">Sign Up</button>
+            </form>
+            <form id="forgot-form" class="modal-form">
+                <input type="email" id="forgot-email" placeholder="Enter your email" required>
+                <button type="submit">Send Reset Link</button>
+            </form>
+            <form id="admin-form" class="modal-form">
+                <input type="password" id="admin-password" placeholder="Enter Admin Password" required>
+                <button type="submit">Access Admin Panel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Floating Blobs -->
+    <div class="blob-bg bg-yellow-500 w-80 h-80 top-20 left-10"></div>
+    <div class="blob-bg bg-yellow-600 w-96 h-96 bottom-40 right-10"></div>
+    
+    <!-- Navigation Bar (Glassmorphism) -->
+    <nav class="glass fixed top-0 w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center">
+                    <span class="text-3xl font-extrabold gradient-text">HubCentral</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="movies.html" class="hub-link px-4 py-2 rounded-md text-sm font-medium transition duration-300 custom-underline">MovieHub</a>
+                    <a href="events.html" class="hub-link px-4 py-2 rounded-md text-sm font-medium transition duration-300 custom-underline">EventHub</a>
+                    <a href="flight.html" class="hub-link px-4 py-2 rounded-md text-sm font-medium transition duration-300 custom-underline">AirHub</a>
+                    <a href="#contact" class="px-4 py-2 rounded-md text-sm font-medium transition duration-300 custom-underline">Contact</a>
+                    <a href="admin.html" id="admin-link" class="admin-link px-4 py-2 rounded-md text-sm font-medium transition duration-300 custom-underline" style="display: none;">Admin Panel</a>
+                    <span id="auth-link" class="sign-in-link sign-in-highlight">Sign In</span>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="menu-toggle" class="text-neutral hover:text-primary focus:outline-none">
+                        <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass w-full absolute top-20 left-0">
+            <div class="px-4 py-3 space-y-3">
+                <a href="movies.html" class="hub-link block px-3 py-2 rounded-md text-base font-medium transition duration-300">MovieHub</a>
+                <a href="events.html" class="hub-link block px-3 py-2 rounded-md text-base font-medium transition duration-300">EventHub</a>
+                <a href="flight.html" class="hub-link block px-3 py-2 rounded-md text-base font-medium transition duration-300">AirHub</a>
+                <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium transition duration-300">Contact</a>
+                <a href="admin.html" id="mobile-admin-link" class="admin-link block px-3 py-2 rounded-md text-base font-medium transition duration-300" style="display: none;">Admin Panel</a>
+                <span id="mobile-auth-link" class="sign-in-link block px-3 py-2 rounded-md text-base font-medium transition duration-300 sign-in-highlight">Sign In</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section (Parallax Background) -->
+    <section class="relative h-screen flex items-center justify-center overflow-hidden hero-section">
+        <div class="absolute inset-0 z-0">
+            <video autoplay muted loop class="w-full h-full object-cover">
+                <source src="https://assets.mixkit.co/videos/preview/mixkit-flying-through-a-virtual-data-network-15851-large.mp4" type="video/mp4">
+            </video>
+            <div class="absolute inset-0 bg-gradient-to-b from-black/80 to-black/50"></div>
+        </div>
+        
+        <div class="text-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <h1 class="text-5xl sm:text-7xl font-extrabold mb-6" data-aos="zoom-in" data-aos-duration="1200">
+                <span class="glow">Welcome to</span> <span id="typing-text" class="typing-text welcome-text"></span>
+            </h1>
+            <p class="text-xl sm:text-3xl mb-8 max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">
+                Experience <span class="gradient-text font-semibold">movies</span>, <span class="gradient-text font-semibold">events</span>, and <span class="gradient-text font-semibold">travel</span> like never before.
+            </p>
+            <a href="#featured" class="inline-block neumorphic font-semibold px-10 py-4 rounded-full transition text-lg" 
+               data-aos="zoom-in" data-aos-delay="400" data-aos-duration="800">
+                Discover Now <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator" data-aos="fade-up" data-aos-delay="600">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <!-- Floating Lottie Animation -->
+        <div class="absolute bottom-10 right-10 w-40 h-40 opacity-70 lottie-container" data-aos="fade-left" data-aos-delay="800">
+            <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_sk5h1kfn.json" background="transparent" speed="1" loop autoplay></lottie-player>
+        </div>
+    </section>
+
+    <!-- Featured Hubs Section -->
+    <section id="featured" class="py-24 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-5xl font-bold mb-4">Our <span class="gradient-text">Premier Hubs</span></h2>
+                <p class="text-xl max-w-3xl mx-auto">
+                    Explore a world of entertainment, adventure, and travel with HubCentral.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <!-- MovieHub Card -->
+                <div class="hub-card glass rounded-2xl p-8 text-center relative overflow-hidden tilt-effect" 
+                     data-aos="fade-up" data-aos-delay="100" data-tilt data-tilt-scale="1.05">
+                    <div class="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-yellow-500/30 blur-xl"></div>
+                    <div class="relative z-10">
+                        <div class="w-full h-64 mb-6 rounded-xl overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" 
+                                 alt="MovieHub" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-3">MovieHub</h3>
+                        <p class="mb-6">Immerse yourself in the latest films with seamless booking and reviews.</p>
+                        <a href="movies.html" class="hub-link inline-block neumorphic font-medium px-8 py-3 rounded-full transition">
+                            Visit MovieHub <i class="fas fa-film ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- EventHub Card -->
+                <div class="hub-card glass rounded-2xl p-8 text-center relative overflow-hidden tilt-effect" 
+                     data-aos="fade-up" data-aos-delay="200" data-tilt data-tilt-scale="1.05">
+                    <div class="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-yellow-600/30 blur-xl"></div>
+                    <div class="relative z-10">
+                        <div class="w-full h-64 mb-6 rounded-xl overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" 
+                                 alt="EventHub" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-3">EventHub</h3>
+                        <p class="mb-6">Discover concerts, festivals, and workshops tailored to you.</p>
+                        <a href="events.html" class="hub-link inline-block neumorphic font-medium px-8 py-3 rounded-full transition">
+                            Visit EventHub <i class="fas fa-calendar-alt ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- AirHub Card -->
+                <div class="hub-card glass rounded-2xl p-8 text-center relative overflow-hidden tilt-effect" 
+                     data-aos="fade-up" data-aos-delay="300" data-tilt data-tilt-scale="1.05">
+                    <div class="absolute -top-10 -left-10 w-32 h-32 rounded-full bg-yellow-700/30 blur-xl"></div>
+                    <div class="relative z-10">
+                        <div class="w-full h-64 mb-6 rounded-xl overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" 
+                                 alt="AirHub" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-3">AirHub</h3>
+                        <p class="mb-6">Book flights and plan your dream vacation effortlessly.</p>
+                        <a href="flight.html" class="hub-link inline-block neumorphic font-medium px-8 py-3 rounded-full transition">
+                            Visit AirHub <i class="fas fa-plane ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Floating Elements -->
+        <div class="absolute top-1/4 left-1/4 w-16 h-16 rounded-full bg-yellow-500/20 blur-lg floating" style="animation-delay: 0s;"></div>
+        <div class="absolute bottom-1/3 right-1/4 w-24 h-24 rounded-full bg-yellow-600/20 blur-lg floating" style="animation-delay: 2s;"></div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-24 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-5xl font-bold mb-4">Trusted by <span class="gradient-text">Thousands</span></h2>
+                <p class="text-xl">See why users love HubCentral's seamless experience.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass rounded-2xl p-8 flex flex-col items-center tilt-effect" 
+                     data-aos="zoom-in" data-aos-delay="100" data-tilt>
+                    <div class="w-20 h-20 mb-4 rounded-full overflow-hidden border-2 border-yellow-500/50">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User" class="w-full h-full object-cover">
+                    </div>
+                    <div class="text-center">
+                        <div class="flex mb-2 justify-center">
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                        </div>
+                        <p class="italic mb-4">"MovieHub is a game-changer for movie lovers. Booking is a breeze!"</p>
+                        <p class="font-semibold">– Priya S.</p>
+                    </div>
+                </div>
+                
+                <div class="glass rounded-2xl p-8 flex flex-col items-center tilt-effect" 
+                     data-aos="zoom-in" data-aos-delay="200" data-tilt>
+                    <div class="w-20 h-20 mb-4 rounded-full overflow-hidden border-2 border-yellow-500/50">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="w-full h-full object-cover">
+                    </div>
+                    <div class="text-center">
+                        <div class="flex mb-2 justify-center">
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star-half-alt text-yellow-400"></i>
+                        </div>
+                        <p class="italic mb-4">"EventHub helped me find the best concerts in my city!"</p>
+                        <p class="font-semibold">– Arjun M.</p>
+                    </div>
+                </div>
+                
+                <div class="glass rounded-2xl p-8 flex flex-col items-center tilt-effect" 
+                     data-aos="zoom-in" data-aos-delay="300" data-tilt>
+                    <div class="w-20 h-20 mb-4 rounded-full overflow-hidden border-2 border-yellow-500/50">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="User" class="w-full h-full object-cover">
+                    </div>
+                    <div class="text-center">
+                        <div class="flex mb-2 justify-center">
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                        </div>
+                        <p class="italic mb-4">"AirHub made travel planning so easy and affordable."</p>
+                        <p class="font-semibold">– Nisha R.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Floating Lottie Animation -->
+        <div class="absolute bottom-0 left-0 w-64 h-64 opacity-20 lottie-container">
+            <lottie-player src="https://assets1.lottiefiles.com/packages/lf20_5tkzkblw.json" background="transparent" speed="1" loop autoplay></lottie-player>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-16 bg-gradient-to-r from-black/80 to-black/60 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div class="glass p-6 rounded-xl" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-4xl font-bold gradient-text mb-2">500K+</div>
+                    <div>Happy Users</div>
+                </div>
+                <div class="glass p-6 rounded-xl" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-4xl font-bold gradient-text mb-2">10K+</div>
+                    <div>Events Listed</div>
+                </div>
+                <div class="glass p-6 rounded-xl" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-4xl font-bold gradient-text mb-2">50+</div>
+                    <div>Destinations</div>
+                </div>
+                <div class="glass p-6 rounded-xl" data-aos="fade-up" data-aos-delay="400">
+                    <div class="text-4xl font-bold gradient-text mb-2">24/7</div>
+                    <div>Support</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-24 relative overflow-hidden cta-section">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/20 via-black/80 to-yellow-600/20"></div>
+            <div class="absolute top-0 left-0 w-full h-full opacity-20 lottie-container">
+                <lottie-player src="https://assets1.lottiefiles.com/packages/lf20_isdxvzgq.json" background="transparent" speed="0.5" loop autoplay></lottie-player>
+            </div>
+        </div>
+        
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <div class="glass rounded-2xl p-12" data-aos="zoom-in">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Ready to <span class="gradient-text">Elevate</span> Your Experience?</h2>
+                <p class="text-xl mb-8 max-w-2xl mx-auto">
+                    Join thousands of users who are already enjoying seamless booking across movies, events, and travel.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="#featured" class="neumorphic font-semibold px-8 py-4 rounded-full transition flex-1 text-center">
+                        Explore Hubs
+                    </a>
+                    <a href="#" class="signup-link glass font-semibold px-8 py-4 rounded-full border transition flex-1 text-center">
+                        Sign Up Free
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="glass pt-16 pb-8 relative overflow-hidden footer">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div data-aos="fade-up">
+                    <h3 class="text-2xl font-bold gradient-text mb-4">HubCentral</h3>
+                    <p class="mb-4">Your premier destination for movies, events, and travel.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="hover:text-primary transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="hover:text-primary transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="hover:text-primary transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="hover:text-primary transition"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div data-aos="fade-up" data-aos-delay="100">
+                    <h3 class="text-xl font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="movies.html" class="hub-link hover:text-primary transition">MovieHub</a></li>
+                        <li><a href="events.html" class="hub-link hover:text-primary transition">EventHub</a></li>
+                        <li><a href="flight.html" class="hub-link hover:text-primary transition">AirHub</a></li>
+                        <li><a href="#" class="hover:text-primary transition">About Us</a></li>
+                    </ul>
+                </div>
+                
+                <div data-aos="fade-up" data-aos-delay="200">
+                    <h3 class="text-xl font-semibold mb-4">Support</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-primary transition">Help Center</a></li>
+                        <li><a href="#" class="hover:text-primary transition">FAQs</a></li>
+                        <li><a href="#" class="hover:text-primary transition">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-primary transition">Terms of Service</a></li>
+                    </ul>
+                </div>
+                
+                <div data-aos="fade-up" data-aos-delay="300">
+                    <h3 class="text-xl font-semibold mb-4">Contact Us</h3>
+                    <ul class="space-y-2 mb-4">
+                        <li class="flex items-center"><i class="fas fa-envelope mr-2 text-primary"></i> support@hubcentral.com</li>
+                        <li class="flex items-center"><i class="fas fa-phone-alt mr-2 text-primary"></i> (123) 456-7890</li>
+                        <li class="flex items-center"><i class="fas fa-map-marker-alt mr-2 text-primary"></i> 123 Hub Street, Digital City</li>
+                    </ul>
+                    <form id="feedback-form" class="modal-form">
+                        <input type="text" id="feedback-name" placeholder="Your Name" required>
+                        <input type="email" id="feedback-email" placeholder="Your Email" required>
+                        <textarea id="feedback-message" placeholder="Your Feedback" rows="4" class="w-full p-4 mb-4 rounded-xl bg-black/30 text-neutral resize-none" required></textarea>
+                        <button type="submit" class="w-full">Submit Feedback</button>
+                    </form>
+                    <div id="feedback-message" class="message-box" style="display: none;"></div>
+                </div>
+            </div>
+            
+            <div class="border-t border-yellow-500/50 pt-8 text-center" data-aos="fade-up">
+                <p>© 2025 HubCentral. All rights reserved.</p>
+            </div>
+        </div>
+        
+        <!-- Floating Elements -->
+        <div class="absolute -bottom-20 -right-20 w-64 h-64 rounded-full bg-yellow-500/20 blur-3xl"></div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 w-12 h-12 rounded-full glass text-primary flex items-center justify-center opacity-0 invisible transition-all duration-300">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true
+        });
+        
+        // Initialize VanillaTilt
+        document.querySelectorAll('.tilt-effect').forEach(el => {
+            VanillaTilt.init(el, {
+                max: 15,
+                speed: 400,
+                glare: true,
+                "max-glare": 0.2,
+            });
+        });
+        
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Typing Effect
+        const texts = ['HubCentral', 'Your Adventure Hub', 'Movies & More'];
+        let index = 0;
+        let charIndex = 0;
+        const typingText = document.getElementById('typing-text');
+        let isDeleting = false;
+        
+        function type() {
+            const currentText = texts[index];
+            
+            if (isDeleting) {
+                typingText.textContent = currentText.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typingText.textContent = currentText.substring(0, charIndex + 1);
+                charIndex++;
+            }
+            
+            if (!isDeleting && charIndex === currentText.length) {
+                isDeleting = true;
+                setTimeout(type, 1500);
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                index = (index + 1) % texts.length;
+                setTimeout(type, 300);
+            } else {
+                setTimeout(type, isDeleting ? 50 : 100);
+            }
+        }
+        
+        setTimeout(type, 1000);
+        
+        // Back to Top Button
+        const backToTopButton = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('opacity-0', 'invisible');
+                backToTopButton.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopButton.classList.remove('opacity-100', 'visible');
+                backToTopButton.classList.add('opacity-0', 'invisible');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            if (!anchor.classList.contains('hub-link') && !anchor.classList.contains('sign-in-link') && !anchor.classList.contains('signup-link') && !anchor.classList.contains('admin-link')) {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                        
+                        if (!mobileMenu.classList.contains('hidden')) {
+                            mobileMenu.classList.add('hidden');
+                        }
+                    }
+                });
+            }
+        });
+        
+        // Modal and Authentication Logic
+        const authModal = document.getElementById('auth-modal');
+        const closeModal = document.querySelector('.close-modal');
+        const modalTabs = document.querySelectorAll('.modal-tab');
+        const modalForms = document.querySelectorAll('.modal-form');
+        const signinForm = document.getElementById('signin-form');
+        const signupForm = document.getElementById('signup-form');
+        const forgotForm = document.getElementById('forgot-form');
+        const adminForm = document.getElementById('admin-form');
+        const feedbackForm = document.getElementById('feedback-form');
+        const hubLinks = document.querySelectorAll('.hub-link');
+        const signinLinks = document.querySelectorAll('.sign-in-link');
+        const signupLink = document.querySelector('.signup-link');
+        const adminLinks = document.querySelectorAll('.admin-link');
+        const messageBox = document.getElementById('message-box');
+        const feedbackMessage = document.getElementById('feedback-message');
+        const loading = document.getElementById('loading');
+        const authLink = document.getElementById('auth-link');
+        const mobileAuthLink = document.getElementById('mobile-auth-link');
+
+        // Hardcoded admin password (for demo; change in production)
+        const ADMIN_PASSWORD = 'admin123';
+
+        // Show Message
+        function showMessage(element, message, type) {
+            element.innerHTML = `<lottie-player src="https://assets3.lottiefiles.com/packages/lf20_jbrw3hcz.json" background="transparent" speed="1" style="width: 24px; height: 24px;" autoplay></lottie-player> ${message}`;
+            element.className = `message-box ${type}`;
+            element.style.display = 'flex';
+            setTimeout(() => {
+                element.style.display = 'none';
+            }, 5000);
+        }
+
+        // Show Loading
+        function showLoading(show) {
+            loading.style.display = show ? 'block' : 'none';
+            modalForms.forEach(form => form.style.display = show ? 'none' : form.classList.contains('active') ? 'block' : 'none');
+        }
+
+        // Validate Email
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        // Update Auth Link
+        function updateAuthLink() {
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+            const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
+            const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+            
+            if (isAdmin) {
+                document.getElementById('admin-link').style.display = 'block';
+                document.getElementById('mobile-admin-link').style.display = 'block';
+            } else {
+                document.getElementById('admin-link').style.display = 'none';
+                document.getElementById('mobile-admin-link').style.display = 'none';
+            }
+
+            if (isLoggedIn && user.username) {
+                const firstLetter = user.username.charAt(0).toUpperCase();
+                authLink.innerHTML = `<a href="user.html" class="profile-icon">${firstLetter}</a>`;
+                mobileAuthLink.innerHTML = `<a href="user.html" class="profile-icon">${firstLetter}</a>`;
+                authLink.classList.remove('sign-in-link', 'sign-in-highlight');
+                mobileAuthLink.classList.remove('sign-in-link', 'sign-in-highlight');
+            } else {
+                authLink.innerHTML = 'Sign In';
+                mobileAuthLink.innerHTML = 'Sign In';
+                authLink.classList.add('sign-in-link', 'sign-in-highlight');
+                mobileAuthLink.classList.add('sign-in-link', 'sign-in-highlight');
+            }
+        }
+
+        // Tab Switching
+        modalTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                modalTabs.forEach(t => t.classList.remove('active'));
+                modalForms.forEach(f => f.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(`${tab.dataset.tab}-form`).classList.add('active');
+                messageBox.style.display = 'none';
+                showLoading(false);
+            });
+        });
+
+        // Forgot Password Link
+        document.querySelector('.forgot-password').addEventListener('click', (e) => {
+            e.preventDefault();
+            modalTabs.forEach(t => t.classList.remove('active'));
+            modalForms.forEach(f => f.classList.remove('active'));
+            
+            document.getElementById('forgot-form').classList.add('active');
+            messageBox.style.display = 'none';
+            showLoading(false);
+        });
+
+        // Open Modal
+        function openModal(tab = 'signin') {
+            authModal.style.display = 'flex';
+            modalTabs.forEach(t => t.classList.remove('active'));
+            modalForms.forEach(f => f.classList.remove('active'));
+            
+            document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+            document.getElementById(`${tab}-form`).classList.add('active');
+            messageBox.style.display = 'none';
+            showLoading(false);
+            AOS.refresh();
+        }
+
+        // Close Modal
+        closeModal.addEventListener('click', () => {
+            authModal.style.display = 'none';
+            showLoading(false);
+        });
+
+        // Close Modal on Outside Click
+        authModal.addEventListener('click', (e) => {
+            if (e.target === authModal) {
+                authModal.style.display = 'none';
+                showLoading(false);
+            }
+        });
+
+        // Simulated Authentication (using localStorage)
+        signinForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            showLoading(true);
+            const email = document.getElementById('signin-email').value;
+            const password = document.getElementById('signin-password').value;
+
+            setTimeout(() => {
+                if (!validateEmail(email)) {
+                    showLoading(false);
+                    showMessage(messageBox, 'Please enter a valid email address.', 'error');
+                    return;
+                }
+
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const storedUser = users.find(user => user.email === email && user.password === password);
+                
+                if (storedUser) {
+                    sessionStorage.setItem('isLoggedIn', 'true');
+                    sessionStorage.setItem('user', JSON.stringify(storedUser));
+                    authModal.style.display = 'none';
+                    showMessage(messageBox, 'Signed in successfully!', 'success');
+                    updateAuthLink();
+                    const redirectUrl = sessionStorage.getItem('redirectUrl');
+                    if (redirectUrl) {
+                        window.location.href = redirectUrl;
+                        sessionStorage.removeItem('redirectUrl');
+                    }
+                } else {
+                    showLoading(false);
+                    showMessage(messageBox, 'Invalid email or password.', 'error');
+                }
+            }, 1000);
+        });
+
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            showLoading(true);
+            const username = document.getElementById('signup-username').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+
+            setTimeout(() => {
+                if (!validateEmail(email)) {
+                    showLoading(false);
+                    showMessage(messageBox, 'Please enter a valid email address.', 'error');
+                    return;
+                }
+
+                if (password.length < 8) {
+                    showLoading(false);
+                    showMessage(messageBox, 'Password must be at least 8 characters.', 'error');
+                    return;
+                }
+
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                if (users.some(user => user.email === email)) {
+                    showLoading(false);
+                    showMessage(messageBox, 'Email already registered.', 'error');
+                    return;
+                }
+
+                const newUser = {
+                    username,
+                    email,
+                    password,
+                    createdAt: new Date().toISOString(),
+                    confirmed: false
+                };
+                users.push(newUser);
+                localStorage.setItem('users', JSON.stringify(users));
+                sessionStorage.setItem('user', JSON.stringify(newUser));
+                sessionStorage.setItem('isLoggedIn', 'true');
+                sessionStorage.setItem('emailConfirmation', email);
+                authModal.style.display = 'none';
+                showMessage(messageBox, `A confirmation email has been sent to ${email}.`, 'success');
+                updateAuthLink();
+                const redirectUrl = sessionStorage.getItem('redirectUrl');
+                if (redirectUrl) {
+                    window.location.href = redirectUrl;
+                    sessionStorage.removeItem('redirectUrl');
+                }
+            }, 1000);
+        });
+
+        forgotForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            showLoading(true);
+            const email = document.getElementById('forgot-email').value;
+
+            setTimeout(() => {
+                if (!validateEmail(email)) {
+                    showLoading(false);
+                    showMessage(messageBox, 'Please enter a valid email address.', 'error');
+                    return;
+                }
+
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                if (users.some(user => user.email === email)) {
+                    sessionStorage.setItem('resetRequest', email);
+                    showLoading(false);
+                    showMessage(messageBox, `A password reset link has been sent to ${email}.`, 'success');
+                    forgotForm.reset();
+                    modalTabs.forEach(t => t.classList.remove('active'));
+                    modalForms.forEach(f => f.classList.remove('active'));
+                    document.querySelector('[data-tab="signin"]').classList.add('active');
+                    signinForm.classList.add('active');
+                } else {
+                    showLoading(false);
+                    showMessage(messageBox, 'No account found with this email.', 'error');
+                }
+            }, 1000);
+        });
+
+        // Admin Authentication
+        adminForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            showLoading(true);
+            const password = document.getElementById('admin-password').value;
+
+            setTimeout(() => {
+                if (password === ADMIN_PASSWORD) {
+                    sessionStorage.setItem('isAdmin', 'true');
+                    authModal.style.display = 'none';
+                    showLoading(false);
+                    showMessage(messageBox, 'Admin access granted!', 'success');
+                    updateAuthLink();
+                    window.location.href = 'admin.html';
+                } else {
+                    showLoading(false);
+                    showMessage(messageBox, 'Invalid admin password.', 'error');
+                }
+            }, 1000);
+        });
+
+        // Feedback Form Submission with localStorage
+        feedbackForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('feedback-name').value;
+            const email = document.getElementById('feedback-email').value;
+            const message = document.getElementById('feedback-message').value;
+
+            if (!validateEmail(email)) {
+                showMessage(feedbackMessage, 'Please enter a valid email address.', 'error');
+                return;
+            }
+
+            const feedbackList = JSON.parse(localStorage.getItem('feedbackList') || '[]');
+            feedbackList.push({
+                name,
+                email,
+                message,
+                createdAt: new Date().toISOString()
+            });
+            localStorage.setItem('feedbackList', JSON.stringify(feedbackList));
+            feedbackForm.reset();
+            showMessage(feedbackMessage, 'Feedback submitted successfully!', 'success');
+        });
+
+        // Restrict Hub Access
+        hubLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+                const href = link.getAttribute('href');
+
+                if (!isLoggedIn) {
+                    sessionStorage.setItem('redirectUrl', href);
+                    openModal('signin');
+                } else {
+                    window.location.href = href;
+                }
+            });
+        });
+
+        // Sign In Links
+        signinLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+                if (!isLoggedIn) {
+                    openModal('signin');
+                } else {
+                    window.location.href = 'user.html';
+                }
+            });
+        });
+
+        // Sign Up Link
+        signupLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal('signup');
+        });
+
+        // Admin Links
+        adminLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
+                if (isAdmin) {
+                    window.location.href = 'admin.html';
+                } else {
+                    openModal('admin');
+                }
+            });
+        });
+
+        // Initialize Auth Link
+        updateAuthLink();
+    </script>
+</body>
+</html>

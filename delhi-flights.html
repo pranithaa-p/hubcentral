@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirHub - Seat Selection</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #e63946;
+            --secondary-color: #457b9d;
+            --dark-color: #1d3557;
+            --light-color: #f1faee;
+            --text-dark: #2b2d42;
+            --text-light: #8d99ae;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --accent-color: #f4a261;
+            --success-color: #28a745;
+            --error-color: #dc3545;
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.3);
+            --neumo-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), -4px -4px 8px rgba(255, 255, 255, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-color);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            overflow-y: hidden;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        main {
+            overflow-y: hidden;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        main::-webkit-scrollbar {
+            display: none;
+        }
+
+        header {
+            background: var(--dark-color);
+            color: var(--light-color);
+            padding: 0.8rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--light-color);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: color 0.3s, transform 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .profile-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-avatar {
+            width: 36px;
+            height: 36px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .profile-avatar:hover {
+            transform: scale(1.1);
+        }
+
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--dark-color);
+            border-radius: 6px;
+            box-shadow: var(--neumo-shadow);
+            min-width: 140px;
+            z-index: 100;
+        }
+
+        .profile-dropdown.active {
+            display: block;
+        }
+
+        .profile-dropdown a,
+        .profile-dropdown button {
+            display: block;
+            padding: 0.6rem 1rem;
+            color: var(--light-color);
+            text-decoration: none;
+            font-size: 0.85rem;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .profile-dropdown a:hover,
+        .profile-dropdown button:hover {
+            background: var(--primary-color);
+        }
+
+        .hamburger {
+            display: none;
+            font-size: 1.4rem;
+            color: var(--light-color);
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 0.4rem 0.8rem;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #e63946, #f4a261);
+            transform: scale(1.05);
+            box-shadow: var(--neumo-shadow);
+        }
+
+        .btn-back {
+            background: var(--text-light);
+            color: var(--text-dark);
+        }
+
+        .btn-back:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 0.2rem;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            max-width: 460px;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            background: var(--gradient);
+            color: white;
+            padding: 0.4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: var(--accent-color);
+        }
+
+        .modal-body {
+            padding: 0.4rem;
+            flex: 1;
+        }
+
+        .scroll-container {
+            height: 80vh;
+            overflow-y: scroll;
+            scrollbar-width: auto;
+        }
+
+        .scroll-container::-webkit-scrollbar {
+            width: 14px;
+        }
+
+        .scroll-container::-webkit-scrollbar-thumb {
+            background: var(--text-light);
+            border-radius: 7px;
+        }
+
+        .scroll-container::-webkit-scrollbar-track {
+            background: #e0e0e0;
+        }
+
+        .booking-progress {
+            display: flex;
+            justify-content: center;
+            gap: 0.4rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.7rem;
+            color: var(--text-light);
+        }
+
+        .progress-step.active {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .progress-step i {
+            font-size: 0.85rem;
+            margin-bottom: 0.1rem;
+        }
+
+        .seat-layout-container {
+            padding: 0.4rem;
+            background: var(--glass-bg);
+            border-radius: 5px;
+            box-shadow: var(--neumo-shadow);
+        }
+
+        .plane-indicator {
+            width: 70%;
+            height: 7px;
+            background: linear-gradient(to bottom, #ddd, #f0f0f0);
+            margin: 0 auto 0.4rem;
+            border-radius: 2px;
+            text-align: center;
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        #seat-layout {
+            display: grid;
+            grid-template-columns: repeat(7, 20px);
+            gap: 2px;
+            max-width: 170px;
+            margin: 0 auto;
+            padding: 0.2rem;
+        }
+
+        .seat-btn {
+            width: 20px;
+            height: 20px;
+            font-size: 0.55rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: var(--glass-border);
+        }
+
+        .seat-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .seat-economy {
+            background-color: #d3d3d3;
+            color: #333;
+        }
+
+        .seat-premium {
+            background-color: #ffca28;
+            color: #333;
+        }
+
+        .seat-selected {
+            background-color: var(--primary-color) !important;
+            color: white !important;
+        }
+
+        .seat-booked {
+            background-color: #666 !important;
+            color: #ccc !important;
+            cursor: not-allowed;
+        }
+
+        .seat-gap {
+            background: transparent;
+            box-shadow: none;
+            cursor: default;
+            visibility: hidden;
+        }
+
+        .seat-legend {
+            display: flex;
+            justify-content: center;
+            gap: 0.4rem;
+            margin: 0.4rem 0;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+            font-size: 0.7rem;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+
+        .selection-summary {
+            text-align: center;
+            margin: 0.4rem 0;
+            font-size: 0.75rem;
+        }
+
+        #confirm-seats-btn {
+            width: 100%;
+            margin-top: 0.2rem;
+            padding: 0.3rem;
+        }
+
+        .payment-container {
+            display: flex;
+            gap: 0.4rem;
+            max-height: 50vh;
+        }
+
+        .payment-sidebar {
+            flex: 1;
+            background: var(--glass-bg);
+            padding: 0.4rem;
+            border-radius: 5px;
+            max-height: 100%;
+            overflow-y: auto;
+            scrollbar-width: auto;
+        }
+
+        .payment-sidebar::-webkit-scrollbar {
+            width: 14px;
+        }
+
+        .payment-sidebar::-webkit-scrollbar-thumb {
+            background: var(--text-light);
+            border-radius: 7px;
+        }
+
+        .payment-sidebar::-webkit-scrollbar-track {
+            background: #e0e0e0;
+        }
+
+        .payment-sidebar h3 {
+            font-size: 0.85rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .payment-sidebar p {
+            font-size: 0.7rem;
+            margin: 0.2rem 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .payment-sidebar p span:first-child {
+            font-weight: 600;
+        }
+
+        .payment-main {
+            flex: 2;
+            overflow-y: auto;
+            scrollbar-width: auto;
+        }
+
+        .payment-main::-webkit-scrollbar {
+            width: 14px;
+        }
+
+        .payment-main::-webkit-scrollbar-thumb {
+            background: var(--text-light);
+            border-radius: 7px;
+        }
+
+        .payment-main::-webkit-scrollbar-track {
+            background: #e0e0e0;
+        }
+
+        .payment-tabs {
+            display: flex;
+            border-bottom: 2px solid var(--text-light);
+            margin-bottom: 0.4rem;
+        }
+
+        .payment-tab {
+            padding: 0.3rem 0.7rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-dark);
+            transition: all 0.3s;
+        }
+
+        .payment-tab.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .payment-tab-content {
+            display: none;
+        }
+
+        .payment-tab-content.active {
+            display: block;
+        }
+
+        .payment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 0.7rem;
+            font-weight: 500;
+            margin-bottom: 0.1rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 0.3rem;
+            border: 1px solid var(--text-light);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-group input:invalid[required]:not(:placeholder-shown) {
+            border-color: var(--error-color);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 0.4rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .payment-actions {
+            display: flex;
+            gap: 0.4rem;
+            margin-top: 0.4rem;
+        }
+
+        .bill-modal-content {
+            max-width: 360px;
+            padding: 0.7rem;
+            text-align: center;
+            background: white;
+        }
+
+        .bill-header {
+            margin-bottom: 0.4rem;
+        }
+
+        .bill-logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .bill-details {
+            padding: 0.4rem;
+            border-radius: 5px;
+            background: var(--glass-bg);
+            text-align: left;
+        }
+
+        .bill-details p {
+            margin: 0.2rem 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .bill-details p span:first-child {
+            font-weight: 600;
+        }
+
+        .bill-footer {
+            margin-top: 0.4rem;
+        }
+
+        footer {
+            background: var(--dark-color);
+            color: var(--light-color);
+            padding: 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-column h3 {
+            font-size: 1rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.3rem;
+        }
+
+        .footer-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 0.6rem;
+        }
+
+        .social-links a {
+            color: var(--light-color);
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 50px;
+                left: 0;
+                right: 0;
+                background: var(--dark-color);
+                flex-direction: column;
+                padding: 0.8rem;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            #seat-layout {
+                grid-template-columns: repeat(7, 16px);
+                gap: 2px;
+            }
+
+            .seat-btn {
+                width: 16px;
+                height: 16px;
+                font-size: 0.45rem;
+            }
+
+            .payment-container {
+                flex-direction: column;
+            }
+
+            .payment-sidebar {
+                max-height: 120px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal-content {
+                width: 95%;
+            }
+
+            .scroll-container {
+                height: 75vh;
+            }
+
+            .booking-progress {
+                flex-direction: column;
+                gap: 0.2rem;
+            }
+
+            .payment-tabs {
+                flex-direction: column;
+            }
+
+            .payment-tab {
+                padding: 0.2rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">AirHub</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#">Flights</a></li>
+                <li><a href="#">Offers</a></li>
+                <li><a href="#">About</a></li>
+            </ul>
+            <div class="profile-container">
+                <div class="profile-avatar" aria-label="User Profile" id="profile-avatar">U</div>
+                <div class="profile-dropdown">
+                    <a href="user.html">View Profile</a>
+                    <button id="logout-btn">Logout</button>
+                </div>
+            </div>
+            <div class="hamburger" aria-label="Toggle navigation menu">☰</div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Seat Selection Modal -->
+        <div id="seat-modal" class="modal" role="dialog" aria-labelledby="seat-selection">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="seat-selection">Select Your Seats</h2>
+                    <button id="close-seat-modal" class="close-btn" aria-label="Close seat modal">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="scroll-container">
+                        <div class="booking-progress">
+                            <div class="progress-step active"><i class="fas fa-chair"></i>Seats</div>
+                            <div class="progress-step"><i class="fas fa-credit-card"></i>Payment</div>
+                            <div class="progress-step"><i class="fas fa-receipt"></i>Confirmation</div>
+                        </div>
+                        <div class="seat-layout-container">
+                            <div class="plane-indicator">Front of Plane</div>
+                            <div class="seat-legend">
+                                <div class="legend-item">
+                                    <div class="legend-color seat-premium"></div>
+                                    <span>Premium Economy ₹8000</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color seat-economy"></div>
+                                    <span>Economy ₹5000</span>
+                                </div>
+                            </div>
+                            <div id="seat-layout" role="grid" aria-label="Seat selection grid"></div>
+                            <div class="selection-summary" aria-live="polite">
+                                <p id="selected-seats">Selected Seats: None</p>
+                                <p id="total-cost">Total Cost: ₹0</p>
+                            </div>
+                            <button id="confirm-seats-btn" class="btn" disabled aria-label="Proceed to payment">Proceed to Payment</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Selection Modal -->
+        <div id="payment-modal" class="modal" role="dialog" aria-labelledby="payment-selection">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="payment-selection">Complete Payment</h2>
+                    <button id="close-payment-modal" class="close-btn" aria-label="Close payment modal">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="scroll-container">
+                        <div class="booking-progress">
+                            <div class="progress-step"><i class="fas fa-chair"></i>Seats</div>
+                            <div class="progress-step active"><i class="fas fa-credit-card"></i>Payment</div>
+                            <div class="progress-step"><i class="fas fa-receipt"></i>Confirmation</div>
+                        </div>
+                        <div class="payment-container">
+                            <div class="payment-sidebar">
+                                <h3>Booking Summary</h3>
+                                <p><span>Airline:</span> <span id="summary-airline"></span></p>
+                                <p><span>Flight Number:</span> <span id="summary-flight-number"></span></p>
+                                <p><span>Time:</span> <span id="summary-time"></span></p>
+                                <p><span>Duration:</span> <span id="summary-duration"></span></p>
+                                <p><span>Seats:</span> <span id="summary-seats"></span></p>
+                                <p><span>Total:</span> <span id="summary-total"></span></p>
+                            </div>
+                            <div class="payment-main">
+                                <div class="payment-tabs">
+                                    <div class="payment-tab active" data-tab="credit-card">Credit/Debit Card</div>
+                                    <div class="payment-tab" data-tab="upi">UPI</div>
+                                    <div class="payment-tab" data-tab="net-banking">Net Banking</div>
+                                </div>
+                                <div class="payment-tab-content active" id="credit-card-content">
+                                    <div class="payment-form">
+                                        <div class="form-group">
+                                            <label for="card-number">Card Number</label>
+                                            <input type="text" id="card-number" placeholder="1234 5678 9012 3456" pattern="\d{16}" required>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="expiry-date">Expiry Date</label>
+                                                <input type="text" id="expiry-date" placeholder="MM/YY" pattern="\d{2}/\d{2}" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="cvv">CVV</label>
+                                                <input type="text" id="cvv" placeholder="123" pattern="\d{3}" required>
+                                            </div>
+                                        </div>
+                                        <div class="payment-actions">
+                                            <button class="btn btn-back" id="back-to-seats">Back</button>
+                                            <button class="btn" id="pay-credit-card">Pay Now</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="payment-tab-content" id="upi-content">
+                                    <div class="payment-form">
+                                        <div class="form-group">
+                                            <label for="upi-id">UPI ID</label>
+                                            <input type="text" id="upi-id" placeholder="name@bank" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+" required>
+                                        </div>
+                                        <div class="payment-actions">
+                                            <button class="btn btn-back" id="back-to-seats-upi">Back</button>
+                                            <button class="btn" id="pay-upi">Pay Now</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="payment-tab-content" id="net-banking-content">
+                                    <div class="payment-form">
+                                        <div class="form-group">
+                                            <label for="bank-select">Select Bank</label>
+                                            <select id="bank-select" required>
+                                                <option value="">Select Bank</option>
+                                                <option value="sbi">State Bank of India</option>
+                                                <option value="hdfc">HDFC Bank</option>
+                                                <option value="icici">ICICI Bank</option>
+                                            </select>
+                                        </div>
+                                        <div class="payment-actions">
+                                            <button class="btn btn-back" id="back-to-seats-net">Back</button>
+                                            <button class="btn" id="pay-net-banking">Proceed to Bank</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirmation Modal -->
+        <div id="bill-modal" class="modal" role="dialog" aria-labelledby="bill-title">
+            <div class="modal-content bill-modal-content">
+                <div class="bill-header">
+                    <div class="bill-logo">AirHub</div>
+                    <h2 id="bill-title">Booking Confirmation</h2>
+                </div>
+                <div class="bill-details">
+                    <p><span>Airline:</span> <span id="bill-airline"></span></p>
+                    <p><span>Flight Number:</span> <span id="bill-flight-number"></span></p>
+                    <p><span>Time:</span> <span id="bill-time"></span></p>
+                    <p><span>Duration:</span> <span id="bill-duration"></span></p>
+                    <p><span>Seats:</span> <span id="bill-seats"></span></p>
+                    <p><span>Payment Method:</span> <span id="bill-payment-method"></span></p>
+                    <p><span>Total Amount:</span> <span id="bill-total"></span></p>
+                    <p><span>Booking ID:</span> <span id="bill-id"></span></p>
+                    <p><span>Date:</span> <span id="bill-date"></span></p>
+                </div>
+                <div class="bill-footer">
+                    <p>Thank you for booking with AirHub!</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>AirHub</h3>
+                <ul class="footer-links">
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Help</h3>
+                <ul class="footer-links">
+                    <li><a href="faq.html">FAQs</a></li>
+                    <li><a href="#">Booking Status</a></li>
+                    <li><a href="#">Refunds</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Connect</h3>
+                <div class="social-links">
+                    <a href="facebook.com" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="x.com" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="instagram.com" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>© 2025 HubCentral. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize GSAP ScrollTrigger
+            gsap.registerPlugin(ScrollTrigger);
+
+            // DOM Elements
+            const seatModal = document.getElementById('seat-modal');
+            const paymentModal = document.getElementById('payment-modal');
+            const billModal = document.getElementById('bill-modal');
+            const seatLayout = document.getElementById('seat-layout');
+            const selectedSeats = document.getElementById('selected-seats');
+            const totalCost = document.getElementById('total-cost');
+            const confirmSeatsBtn = document.getElementById('confirm-seats-btn');
+            const closeSeatModal = document.getElementById('close-seat-modal');
+            const closePaymentModal = document.getElementById('close-payment-modal');
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            const profileAvatar = document.querySelector('.profile-avatar');
+            const profileDropdown = document.querySelector('.profile-dropdown');
+            const logoutBtn = document.getElementById('logout-btn');
+            const paymentTabs = document.querySelectorAll('.payment-tab');
+            const paymentTabContents = document.querySelectorAll('.payment-tab-content');
+            const backToSeatsButtons = document.querySelectorAll('.btn-back');
+
+            // Parse Query Parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const flightDetails = {
+                airline: decodeURIComponent(urlParams.get('airline') || 'Unknown Airline'),
+                flightNumber: urlParams.get('flightNumber') || 'Unknown Flight',
+                time: decodeURIComponent(urlParams.get('time') || 'Unknown Time'),
+                duration: decodeURIComponent(urlParams.get('duration') || 'Unknown Duration'),
+                price: parseInt(urlParams.get('price')) || 0
+            };
+            console.log('Parsed flight details:', flightDetails);
+
+            // Mandatory Sign-In Check
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+            const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+            if (!isLoggedIn || !user.username) {
+                alert('Please sign in to continue.');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Update Profile Avatar
+            const updateProfileAvatar = () => {
+                try {
+                    const firstLetter = user.username.charAt(0).toUpperCase();
+                    profileAvatar.textContent = firstLetter;
+                    profileAvatar.setAttribute('aria-label', `User profile avatar with letter ${firstLetter}`);
+                    console.log('Profile updated:', { username: user.username });
+                } catch (error) {
+                    console.error('Error updating profile avatar:', error);
+                    profileAvatar.textContent = 'U';
+                }
+            };
+            updateProfileAvatar();
+
+            // Hamburger Menu
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+
+            // Profile Dropdown
+            profileAvatar.addEventListener('click', () => {
+                profileDropdown.classList.toggle('active');
+            });
+
+            // Logout
+            logoutBtn.addEventListener('click', () => {
+                sessionStorage.removeItem('isLoggedIn');
+                sessionStorage.removeItem('user');
+                alert('Logged out successfully!');
+                window.location.href = 'index.html';
+            });
+
+            // State Variables
+            let selectedSeatList = [];
+            let bookingDetails = null;
+
+            // Seat Pricing
+            const seatPrices = {
+                '1': 8000, '2': 8000, '3': 8000, '4': 8000, // Premium Economy
+                '5': 5000, '6': 5000, '7': 5000, '8': 5000, '9': 5000, '10': 5000 // Economy
+            };
+
+            // Toggle Body Scroll
+            function toggleBodyScroll(disable) {
+                document.body.style.overflowY = disable ? 'hidden' : 'hidden';
+            }
+
+            // Manage Booked Seats
+            function getBookedSeats(flightNumber) {
+                return JSON.parse(localStorage.getItem(`bookedSeats_${flightNumber}`) || '[]');
+            }
+
+            function saveBookedSeats(flightNumber, seats) {
+                const key = `bookedSeats_${flightNumber}`;
+                const existingSeats = getBookedSeats(flightNumber);
+                const updatedSeats = [...new Set([...existingSeats, ...seats])];
+                localStorage.setItem(key, JSON.stringify(updatedSeats));
+            }
+
+            // Initialize Seat Layout
+            function initSeatLayout() {
+                console.log('Initializing seat layout...');
+                seatLayout.innerHTML = '';
+                selectedSeatList = [];
+                updateSeatSummary();
+                const bookedSeats = getBookedSeats(flightDetails.flightNumber);
+                console.log('Booked seats:', bookedSeats);
+                const rows = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+                const seatsPerRow = 6; // 3-3 layout (A-B-C | D-E-F)
+                const gap = [4]; // Gap after 3rd seat (aisle)
+
+                rows.forEach(row => {
+                    for (let i = 1; i <= seatsPerRow; i++) {
+                        const seatLetter = String.fromCharCode(64 + i); // A=65, B=66, etc.
+                        const seatNumber = `${row}${seatLetter}`;
+                        const isGap = gap.includes(i);
+                        const seatBtn = document.createElement('button');
+                        seatBtn.className = 'seat-btn';
+                        seatBtn.setAttribute('aria-label', `Seat ${seatNumber}`);
+                        if (isGap) {
+                            seatBtn.classList.add('seat-gap');
+                        } else {
+                            if (parseInt(row) <= 4) seatBtn.classList.add('seat-premium');
+                            else seatBtn.classList.add('seat-economy');
+                            seatBtn.textContent = seatNumber;
+                            if (bookedSeats.includes(seatNumber)) {
+                                seatBtn.classList.add('seat-booked');
+                                seatBtn.disabled = true;
+                            } else {
+                                seatBtn.addEventListener('click', () => {
+                                    seatBtn.classList.toggle('seat-selected');
+                                    selectedSeatList = seatBtn.classList.contains('seat-selected')
+                                        ? [...selectedSeatList, seatNumber]
+                                        : selectedSeatList.filter(s => s !== seatNumber);
+                                    updateSeatSummary();
+                                });
+                            }
+                        }
+                        seatLayout.appendChild(seatBtn);
+                    }
+                });
+                seatModal.style.display = 'flex';
+                toggleBodyScroll(true);
+
+                // Debug scroll container
+                const scrollContainer = document.querySelector('.scroll-container');
+                console.log('Scroll container scrollHeight:', scrollContainer.scrollHeight, 
+                           'clientHeight:', scrollContainer.clientHeight, 
+                           'offsetHeight:', scrollContainer.offsetHeight);
+                console.log('Confirm button position:', confirmSeatsBtn.getBoundingClientRect());
+                console.log('Computed style overflow-y:', getComputedStyle(scrollContainer).overflowY);
+                if (scrollContainer.scrollHeight > scrollContainer.clientHeight) {
+                    console.log('Scroll container is scrollable');
+                    // Force scroll to button
+                    confirmSeatsBtn.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                } else {
+                    console.log('Scroll container content fits within viewport, no scroll needed');
+                }
+            }
+
+            // Update Seat Summary
+            function updateSeatSummary() {
+                selectedSeats.textContent = `Selected Seats: ${selectedSeatList.length ? selectedSeatList.join(', ') : 'None'}`;
+                const total = selectedSeatList.reduce((sum, seat) => sum + seatPrices[seat.split(/[A-F]/)[0]], 0);
+                totalCost.textContent = `Total Cost: ₹${total}`;
+                confirmSeatsBtn.disabled = selectedSeatList.length === 0;
+                console.log('Updated seat summary:', { selectedSeats: selectedSeatList, total });
+            }
+
+            // Confirm Seats
+            confirmSeatsBtn.addEventListener('click', () => {
+                if (selectedSeatList.length > 0) {
+                    bookingDetails = {
+                        airline: flightDetails.airline,
+                        flightNumber: flightDetails.flightNumber,
+                        time: flightDetails.time,
+                        duration: flightDetails.duration,
+                        seats: selectedSeatList,
+                        total: selectedSeatList.reduce((sum, seat) => sum + seatPrices[seat.split(/[A-F]/)[0]], 0)
+                    };
+                    console.log('Confirmed seats:', bookingDetails);
+                    seatModal.style.display = 'none';
+                    openPaymentModal();
+                }
+            });
+
+            // Open Payment Modal
+            function openPaymentModal() {
+                document.getElementById('summary-airline').textContent = bookingDetails.airline;
+                document.getElementById('summary-flight-number').textContent = bookingDetails.flightNumber;
+                document.getElementById('summary-time').textContent = bookingDetails.time;
+                document.getElementById('summary-duration').textContent = bookingDetails.duration;
+                document.getElementById('summary-seats').textContent = bookingDetails.seats.join(', ');
+                document.getElementById('summary-total').textContent = `₹${bookingDetails.total}`;
+                paymentTabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        paymentTabs.forEach(t => t.classList.remove('active'));
+                        paymentTabContents.forEach(c => c.classList.remove('active'));
+                        tab.classList.add('active');
+                        document.getElementById(`${tab.getAttribute('data-tab')}-content`).classList.add('active');
+                    });
+                });
+                backToSeatsButtons.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        paymentModal.style.display = 'none';
+                        seatModal.style.display = 'flex';
+                    });
+                });
+                paymentModal.style.display = 'flex';
+                toggleBodyScroll(true);
+                console.log('Payment modal opened');
+
+                document.getElementById('pay-credit-card').addEventListener('click', processPayment);
+                document.getElementById('pay-upi').addEventListener('click', processPayment);
+                document.getElementById('pay-net-banking').addEventListener('click', processPayment);
+            }
+
+            // Process Payment
+            function processPayment(e) {
+                e.preventDefault();
+                const activeTab = document.querySelector('.payment-tab.active').getAttribute('data-tab');
+                const form = document.getElementById(`${activeTab}-content`);
+                const inputs = form.querySelectorAll('input, select');
+                let valid = true;
+                inputs.forEach(input => {
+                    if (!input.checkValidity()) {
+                        input.reportValidity();
+                        valid = false;
+                    }
+                });
+                if (valid) {
+                    const paymentMethod = activeTab.replace('-', ' ').replace(/\b\w/g, c => c.toUpperCase());
+                    saveBookedSeats(bookingDetails.flightNumber, bookingDetails.seats);
+                    paymentModal.style.display = 'none';
+                    showConfirmation(paymentMethod);
+                    console.log('Payment processed with method:', paymentMethod);
+                }
+            }
+
+            // Show Confirmation
+            function showConfirmation(paymentMethod) {
+                document.getElementById('bill-airline').textContent = bookingDetails.airline;
+                document.getElementById('bill-flight-number').textContent = bookingDetails.flightNumber;
+                document.getElementById('bill-time').textContent = bookingDetails.time;
+                document.getElementById('bill-duration').textContent = bookingDetails.duration;
+                document.getElementById('bill-seats').textContent = bookingDetails.seats.join(', ');
+                document.getElementById('bill-payment-method').textContent = paymentMethod;
+                document.getElementById('bill-total').textContent = `₹${bookingDetails.total}`;
+                document.getElementById('bill-id').textContent = `AH${Math.floor(Math.random() * 1000000)}`;
+                document.getElementById('bill-date').textContent = new Date().toLocaleString();
+                billModal.style.display = 'flex';
+                toggleBodyScroll(true);
+                console.log('Confirmation modal shown');
+            }
+
+            // Close Modals
+            [seatModal, paymentModal, billModal].forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.style.display = 'none';
+                        toggleBodyScroll(false);
+                    }
+                });
+            });
+
+            closeSeatModal.addEventListener('click', () => {
+                seatModal.style.display = 'none';
+                toggleBodyScroll(false);
+                console.log('Seat modal closed');
+            });
+
+            closePaymentModal.addEventListener('click', () => {
+                paymentModal.style.display = 'none';
+                toggleBodyScroll(false);
+                console.log('Payment modal closed');
+            });
+
+            // Initialize Seat Selection
+            try {
+                initSeatLayout();
+            } catch (error) {
+                console.error('Error initializing seat layout:', error);
+                alert('Failed to load seat selection. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>
