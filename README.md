@@ -16,7 +16,7 @@ The project was developed as part of a hackathon, with a focus on creating a uni
 
 The core idea behind HubCentral is **consolidation**.
 
-Most booking experiences are built around a single category — movie tickets on one platform, events on another, and flights somewhere else. HubCentral takes a different approach by bringing these categories together within one platform.
+Most booking platforms focus on a single category, with movie tickets, events, and flights often handled separately. HubCentral takes a different approach by bringing these categories together within one platform.
 
 ### Key Highlights
 
@@ -61,8 +61,8 @@ A flight booking section integrated into the same platform.
 To run HubCentral locally:
 
 ```bash
-git clone https://github.com/pranithaa-p/online_ticket_booking_hackathon.git
-cd online_ticket_booking_hackathon
+git clone https://github.com/pranithaa-p/hubcentral.git
+cd hubcentral
 ```
 
 Open `index.html` in a browser to explore the project.
@@ -80,15 +80,7 @@ The project is organized as a multi-page web application containing:
 * State-specific pages
 * Supporting CSS, JavaScript, and assets
 
-## Live Demo
-
-**[https://pranithaa-p.github.io/hubcentral/](https://pranithaa-p.github.io/hubcentral/)**
-
-## Repository
-
-**[github.com/pranithaa-p/hubcentral](https://github.com/pranithaa-p/hubcentral)**
-
 ##
-Developed as a hackathon project - first one!
+Developed as my first hackathon project.
 
 ---
