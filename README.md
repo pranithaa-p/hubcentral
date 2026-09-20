@@ -82,11 +82,11 @@ The project is organized as a multi-page web application containing:
 
 ## Live Demo
 
-**[hubcentral-live.netlify.app](https://pranithaa-p.github.io/hubcentral/)**
+**[https://pranithaa-p.github.io/hubcentral/](https://pranithaa-p.github.io/hubcentral/)**
 
 ## Repository
 
-**[github.com/pranithaa-p/online_ticket_booking_hackathon](https://github.com/pranithaa-p/hubcentral)**
+**[github.com/pranithaa-p/hubcentral](https://github.com/pranithaa-p/hubcentral)**
 
 ##
 Developed as a hackathon project - first one!
